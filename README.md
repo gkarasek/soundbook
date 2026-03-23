@@ -1,30 +1,41 @@
 # soundbook
 
-An iOS app that emulates contextual sounds to enhance your audiobook and book reading experience.
+An iOS **sound library** app: pick a themed library (e.g. Forest, City), then tap large rounded tiles to hear sounds. The UI is illustration-first and low on text; tiles use gradient placeholders until final artwork ships. Only **one sound plays at a time** (tap again to stop).
+
+Design reference: [`Sources/interfaceDesign.jpg`](Sources/interfaceDesign.jpg).
 
 ## Features
 
-- 🎵 **Sound Synchronization**: Align ambient sounds and effects with book narration
-- 📚 **Multi-Format Support**: Compatible with various audiobook formats
-- 🎧 **Customizable Sound Libraries**: Choose from curated sound collections or create your own
-- 📍 **Scene-Based Audio**: Automatic sound triggers based on narrative elements
-- 🎚️ **Volume Control**: Independent mixing of narration and sound effects
-- ✏️ **Bookmark Integration**: Save favorite moments with associated sound profiles
+- **Library selector** at the bottom switches between curated libraries and their sound sets.
+- **Sound grid** of rounded tiles with varied sizes; active tile is highlighted.
+- **Exclusive playback** via `AVAudioPlayer`: starting a new sound stops the previous one.
+- **Accessibility**: tiles expose labels derived from sound names for VoiceOver.
+- **SwiftPM + app target**: reusable `SoundbookCore` library and a thin `SoundbookApp` shell with bundle ID and `Info.plist`.
 
-## Tech Stack
+Add **`.mp3` (or other) files** to the app bundle matching the `fileName` values in [`Sources/SoundbookCore/SoundLibrary/SoundLibrary.swift`](Sources/SoundbookCore/SoundLibrary/SoundLibrary.swift) to hear real audio; missing files fail safely without crashing.
 
-- **Language**: Swift
-- **Framework**: SwiftUI / UIKit
-- **Audio**: AVFoundation
-- **Storage**: CoreData / SQLite
+## Tech stack
 
-## Getting Started
+- **Language**: Swift 5.9+
+- **UI**: SwiftUI
+- **Audio**: AVFoundation (`AVAudioSession`, `AVAudioPlayer`)
+- **Modules**: Swift Package `SoundbookCore` ([`Package.swift`](Package.swift)) + Xcode app target **SoundbookApp**
+
+## Project layout
+
+| Path | Role |
+|------|------|
+| [`SoundbookApp/`](SoundbookApp/) | `@main` app entry, `Info.plist`, bundle ID |
+| [`Soundbook.xcodeproj/`](Soundbook.xcodeproj/) | Xcode project and shared scheme |
+| [`Sources/SoundbookCore/`](Sources/SoundbookCore/) | Models, sound catalog, audio engine, SwiftUI views and view models |
+| [`Package.swift`](Package.swift) | Declares the `SoundbookCore` library for SwiftPM |
+
+## Getting started
 
 ### Requirements
 
 - iOS 14.0+
-- Xcode 13.0+
-- Swift 5.5+
+- Xcode 15+ (recommended; Swift tools version 5.9)
 
 ### Installation
 
@@ -34,26 +45,44 @@ cd soundbook
 open Soundbook.xcodeproj
 ```
 
-### Build & Run
+### Build and run
 
-1. Select the **SoundbookApp** scheme (not the Swift package executable).
-2. Choose an iPhone simulator (or device).
-3. Press `Cmd + R` to build and run.
+1. Select the **SoundbookApp** scheme (not a standalone Swift package executable).
+2. Choose an iPhone simulator or device.
+3. Press **Cmd + R** to build and run.
 
-The UI and logic live in the **SoundbookCore** Swift package (`Package.swift`); the **SoundbookApp** target is a thin iOS app shell with a real `Info.plist` and bundle ID (`com.gkarasek.soundbook`), which avoids simulator crashes from a missing `CFBundleIdentifier`.
+The UI and logic live in **SoundbookCore**; **SoundbookApp** is a thin shell with a real `Info.plist` and bundle ID (`com.gkarasek.soundbook`), which avoids simulator issues from a missing `CFBundleIdentifier`.
 
 To open only the package (e.g. for SwiftPM tooling): `open Package.swift`.
 
 ## Architecture
 
-- **Audio Engine**: Handles sound playback and synchronization
-- **Content Parser**: Processes audiobooks and reading metadata
-- **Sound Library**: Manages sound effects and ambient audio
-- **UI Layer**: SwiftUI-based interface for playback and settings
+```mermaid
+flowchart LR
+    ContentView --> SoundboardVM[SoundboardViewModel]
+    SoundboardVM --> SoundLibrary
+    SoundboardVM --> AudioEngine
+```
+
+- **ContentView**: Full-screen dark layout, scrollable tile grid, bottom library bar.
+- **SoundboardViewModel**: Selected library, active sound ID, tap-to-toggle and URL resolution for bundle audio.
+- **SoundLibrary**: In-memory `SoundLibraryModel` / `SoundItem` definitions per library.
+- **AudioEngine**: Single active player; `playExclusive` / `stopCurrent` for exclusive playback.
+
+Legacy **reading session** types (`BookSession`, `BookSessionViewModel`, optional session screens) remain in the package for reference but are not used by the root app flow.
+
+## Roadmap / ideas
+
+Possible future directions (not implemented today):
+
+- Sync ambient sounds with audiobook narration or reading position
+- Persistence for sessions or custom libraries (e.g. Core Data / files)
+- Per-sound volume, mixing multiple layers, or looping policies
+- Replace gradient tiles with bundled illustration assets per sound and library
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit pull requests.
+Contributions are welcome. Please open pull requests against `main`.
 
 ## License
 
