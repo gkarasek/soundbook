@@ -31,13 +31,18 @@ An iOS app that emulates contextual sounds to enhance your audiobook and book re
 ```bash
 git clone https://github.com/gkarasek/soundbook.git
 cd soundbook
-open soundbook.xcodeproj
+open Soundbook.xcodeproj
 ```
 
 ### Build & Run
 
-1. Select target device/simulator
-2. Press `Cmd + R` to build and run
+1. Select the **SoundbookApp** scheme (not the Swift package executable).
+2. Choose an iPhone simulator (or device).
+3. Press `Cmd + R` to build and run.
+
+The UI and logic live in the **SoundbookCore** Swift package (`Package.swift`); the **SoundbookApp** target is a thin iOS app shell with a real `Info.plist` and bundle ID (`com.gkarasek.soundbook`), which avoids simulator crashes from a missing `CFBundleIdentifier`.
+
+To open only the package (e.g. for SwiftPM tooling): `open Package.swift`.
 
 ## Architecture
 

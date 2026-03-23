@@ -1,4 +1,4 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.9
 import PackageDescription
 
 let package = Package(
@@ -6,13 +6,15 @@ let package = Package(
     platforms: [
         .iOS(.v14)
     ],
-    dependencies: [
-        .package(url: "https://github.com/apple/SwiftAVFoundation.git", .upToNextMajor(from: "1.0.0"))
+    products: [
+        .library(name: "SoundbookCore", targets: ["SoundbookCore"])
     ],
+    dependencies: [],
     targets: [
         .target(
-            name: "Soundbook",
-            dependencies: ["AVFoundation"]
+            name: "SoundbookCore",
+            dependencies: [],
+            path: "Sources/SoundbookCore"
         )
     ]
 )

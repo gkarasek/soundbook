@@ -1,0 +1,334 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 60;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A0B0C0D0E0F001122334455 /* SoundbookApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B0C0D0E0F001122334456 /* SoundbookApp.swift */; };
+		A0B0C0D0E0F00112233446A /* AudioEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B0C0D0E0F001122334470 /* AudioEngine.swift */; };
+		A0B0C0D0E0F00112233446B /* BookSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B0C0D0E0F001122334471 /* BookSession.swift */; };
+		A0B0C0D0E0F00112233446C /* SoundLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B0C0D0E0F001122334472 /* SoundLibrary.swift */; };
+		A0B0C0D0E0F00112233446D /* BookSessionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B0C0D0E0F001122334473 /* BookSessionViewModel.swift */; };
+		A0B0C0D0E0F00112233446E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B0C0D0E0F001122334474 /* ContentView.swift */; };
+		A0B0C0D0E0F00112233446F /* NewSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B0C0D0E0F001122334475 /* NewSessionView.swift */; };
+		A0B0C0D0E0F001122334476 /* SessionDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B0C0D0E0F001122334477 /* SessionDetailView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A0B0C0D0E0F001122334456 /* SoundbookApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundbookApp.swift; sourceTree = "<group>"; };
+		A0B0C0D0E0F001122334457 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A0B0C0D0E0F001122334458 /* SoundbookApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SoundbookApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A0B0C0D0E0F001122334470 /* AudioEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioEngine.swift; sourceTree = "<group>"; };
+		A0B0C0D0E0F001122334471 /* BookSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookSession.swift; sourceTree = "<group>"; };
+		A0B0C0D0E0F001122334472 /* SoundLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundLibrary.swift; sourceTree = "<group>"; };
+		A0B0C0D0E0F001122334473 /* BookSessionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookSessionViewModel.swift; sourceTree = "<group>"; };
+		A0B0C0D0E0F001122334474 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		A0B0C0D0E0F001122334475 /* NewSessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewSessionView.swift; sourceTree = "<group>"; };
+		A0B0C0D0E0F001122334477 /* SessionDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionDetailView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A0B0C0D0E0F001122334459 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A0B0C0D0E0F00112233445A = {
+			isa = PBXGroup;
+			children = (
+				A0B0C0D0E0F00112233445B /* SoundbookApp */,
+				A0B0C0D0E0F001122334478 /* SoundbookCore */,
+				A0B0C0D0E0F00112233445C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A0B0C0D0E0F00112233445B /* SoundbookApp */ = {
+			isa = PBXGroup;
+			children = (
+				A0B0C0D0E0F001122334456 /* SoundbookApp.swift */,
+				A0B0C0D0E0F001122334457 /* Info.plist */,
+			);
+			path = SoundbookApp;
+			sourceTree = "<group>";
+		};
+		A0B0C0D0E0F00112233445C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A0B0C0D0E0F001122334458 /* SoundbookApp.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A0B0C0D0E0F001122334478 /* SoundbookCore */ = {
+			isa = PBXGroup;
+			children = (
+				A0B0C0D0E0F001122334479 /* AudioEngine */,
+				A0B0C0D0E0F00112233447A /* Models */,
+				A0B0C0D0E0F00112233447B /* SoundLibrary */,
+				A0B0C0D0E0F00112233447C /* UI */,
+			);
+			path = Sources/SoundbookCore;
+			sourceTree = "<group>";
+		};
+		A0B0C0D0E0F001122334479 /* AudioEngine */ = {
+			isa = PBXGroup;
+			children = (
+				A0B0C0D0E0F001122334470 /* AudioEngine.swift */,
+			);
+			path = AudioEngine;
+			sourceTree = "<group>";
+		};
+		A0B0C0D0E0F00112233447A /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A0B0C0D0E0F001122334471 /* BookSession.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A0B0C0D0E0F00112233447B /* SoundLibrary */ = {
+			isa = PBXGroup;
+			children = (
+				A0B0C0D0E0F001122334472 /* SoundLibrary.swift */,
+			);
+			path = SoundLibrary;
+			sourceTree = "<group>";
+		};
+		A0B0C0D0E0F00112233447C /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				A0B0C0D0E0F00112233447D /* ViewModels */,
+				A0B0C0D0E0F00112233447E /* Views */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		A0B0C0D0E0F00112233447D /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				A0B0C0D0E0F001122334473 /* BookSessionViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		A0B0C0D0E0F00112233447E /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A0B0C0D0E0F001122334474 /* ContentView.swift */,
+				A0B0C0D0E0F001122334475 /* NewSessionView.swift */,
+				A0B0C0D0E0F001122334477 /* SessionDetailView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A0B0C0D0E0F00112233445D /* SoundbookApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A0B0C0D0E0F00112233445E /* Build configuration list for PBXNativeTarget "SoundbookApp" */;
+			buildPhases = (
+				A0B0C0D0E0F00112233445F /* Sources */,
+				A0B0C0D0E0F001122334459 /* Frameworks */,
+				A0B0C0D0E0F001122334460 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SoundbookApp;
+			productName = SoundbookApp;
+			productReference = A0B0C0D0E0F001122334458 /* SoundbookApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A0B0C0D0E0F001122334462 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					A0B0C0D0E0F00112233445D = {
+						CreatedOnToolsVersion = 16.0;
+					};
+				};
+			};
+			buildConfigurationList = A0B0C0D0E0F001122334463 /* Build configuration list for PBXProject "Soundbook" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A0B0C0D0E0F00112233445A;
+			productRefGroup = A0B0C0D0E0F00112233445C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A0B0C0D0E0F00112233445D /* SoundbookApp */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A0B0C0D0E0F001122334460 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A0B0C0D0E0F00112233445F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A0B0C0D0E0F001122334455 /* SoundbookApp.swift in Sources */,
+				A0B0C0D0E0F00112233446A /* AudioEngine.swift in Sources */,
+				A0B0C0D0E0F00112233446B /* BookSession.swift in Sources */,
+				A0B0C0D0E0F00112233446C /* SoundLibrary.swift in Sources */,
+				A0B0C0D0E0F00112233446D /* BookSessionViewModel.swift in Sources */,
+				A0B0C0D0E0F00112233446E /* ContentView.swift in Sources */,
+				A0B0C0D0E0F00112233446F /* NewSessionView.swift in Sources */,
+				A0B0C0D0E0F001122334476 /* SessionDetailView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A0B0C0D0E0F001122334465 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		A0B0C0D0E0F001122334466 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A0B0C0D0E0F001122334467 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = SoundbookApp/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gkarasek.soundbook;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A0B0C0D0E0F001122334468 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = SoundbookApp/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gkarasek.soundbook;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A0B0C0D0E0F001122334463 /* Build configuration list for PBXProject "Soundbook" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A0B0C0D0E0F001122334465 /* Debug */,
+				A0B0C0D0E0F001122334466 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A0B0C0D0E0F00112233445E /* Build configuration list for PBXNativeTarget "SoundbookApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A0B0C0D0E0F001122334467 /* Debug */,
+				A0B0C0D0E0F001122334468 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A0B0C0D0E0F001122334462 /* Project object */;
+}
