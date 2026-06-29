@@ -15,6 +15,8 @@
 		A0B0C0D0E0F00112233446E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B0C0D0E0F001122334474 /* ContentView.swift */; };
 		A0B0C0D0E0F00112233446F /* NewSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B0C0D0E0F001122334475 /* NewSessionView.swift */; };
 		A0B0C0D0E0F001122334476 /* SessionDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B0C0D0E0F001122334477 /* SessionDetailView.swift */; };
+		A0B0C0D0E0F001122334480 /* SoundGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B0C0D0E0F001122334481 /* SoundGridView.swift */; };
+		A0B0C0D0E0F001122334482 /* GalleryDockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B0C0D0E0F001122334483 /* GalleryDockView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +30,8 @@
 		A0B0C0D0E0F001122334474 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		A0B0C0D0E0F001122334475 /* NewSessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewSessionView.swift; sourceTree = "<group>"; };
 		A0B0C0D0E0F001122334477 /* SessionDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionDetailView.swift; sourceTree = "<group>"; };
+		A0B0C0D0E0F001122334481 /* SoundGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundGridView.swift; sourceTree = "<group>"; };
+		A0B0C0D0E0F001122334483 /* GalleryDockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryDockView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,6 +127,8 @@
 			isa = PBXGroup;
 			children = (
 				A0B0C0D0E0F001122334474 /* ContentView.swift */,
+				A0B0C0D0E0F001122334481 /* SoundGridView.swift */,
+				A0B0C0D0E0F001122334483 /* GalleryDockView.swift */,
 				A0B0C0D0E0F001122334475 /* NewSessionView.swift */,
 				A0B0C0D0E0F001122334477 /* SessionDetailView.swift */,
 			);
@@ -204,6 +210,8 @@
 				A0B0C0D0E0F00112233446E /* ContentView.swift in Sources */,
 				A0B0C0D0E0F00112233446F /* NewSessionView.swift in Sources */,
 				A0B0C0D0E0F001122334476 /* SessionDetailView.swift in Sources */,
+				A0B0C0D0E0F001122334480 /* SoundGridView.swift in Sources */,
+				A0B0C0D0E0F001122334482 /* GalleryDockView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
