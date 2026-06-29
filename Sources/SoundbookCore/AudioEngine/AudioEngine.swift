@@ -77,4 +77,4 @@ class AudioEngine {
         return currentURL == soundURL && isPlayingCurrentSound()
     }
 }
-}
+

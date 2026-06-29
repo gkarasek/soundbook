@@ -46,7 +46,12 @@ final class SoundboardViewModel: ObservableObject {
     }
 
     var visibleSounds: [SoundItem] {
-        selectedLibrary?.sounds ?? []
+        (selectedLibrary?.sounds ?? []).sorted { lhs, rhs in
+            if lhs.gridPlacement.row != rhs.gridPlacement.row {
+                return lhs.gridPlacement.row < rhs.gridPlacement.row
+            }
+            return lhs.gridPlacement.column < rhs.gridPlacement.column
+        }
     }
 
     func selectLibrary(_ library: SoundLibraryModel) {
