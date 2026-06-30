@@ -27,7 +27,6 @@ final class BookSessionViewModel: ObservableObject {
 final class SoundboardViewModel: ObservableObject {
     @Published private(set) var libraries: [SoundLibraryModel]
     @Published var selectedLibraryID: SoundLibraryModel.ID?
-    @Published var activeSoundID: SoundItem.ID?
 
     private let audioEngine: AudioEngine
 
@@ -38,6 +37,7 @@ final class SoundboardViewModel: ObservableObject {
         self.libraries = soundLibrary.libraries
         self.selectedLibraryID = soundLibrary.libraries.first?.id
         self.audioEngine = audioEngine
+        startBackgroundForSelectedLibrary()
     }
 
     var selectedLibrary: SoundLibraryModel? {
@@ -57,27 +57,39 @@ final class SoundboardViewModel: ObservableObject {
     func selectLibrary(_ library: SoundLibraryModel) {
         selectedLibraryID = library.id
         stopActiveSound()
+        startBackground(for: library)
     }
 
-    func onSoundTapped(_ sound: SoundItem) {
-        if activeSoundID == sound.id {
-            stopActiveSound()
-            return
-        }
-
+    func onSoundPressBegan(_ sound: SoundItem) {
         guard let soundURL = resolveAudioURL(for: sound.fileName) else {
-            audioEngine.stopCurrent()
-            activeSoundID = nil
+            audioEngine.stopCurrentImmediately()
             return
         }
 
-        let didStart = audioEngine.playExclusive(from: soundURL)
-        activeSoundID = didStart ? sound.id : nil
+        _ = audioEngine.playExclusive(from: soundURL)
+    }
+
+    func onSoundPressEnded() {
+        audioEngine.fadeOutAndStopCurrent()
     }
 
     func stopActiveSound() {
-        audioEngine.stopCurrent()
-        activeSoundID = nil
+        audioEngine.fadeOutAndStopCurrent()
+    }
+
+    private func startBackgroundForSelectedLibrary() {
+        guard let library = selectedLibrary else { return }
+        startBackground(for: library)
+    }
+
+    private func startBackground(for library: SoundLibraryModel) {
+        guard let fileName = library.backgroundFileName,
+              let soundURL = resolveAudioURL(for: fileName) else {
+            audioEngine.stopBackground()
+            return
+        }
+
+        _ = audioEngine.playBackground(from: soundURL)
     }
 
     private func resolveAudioURL(for fileName: String) -> URL? {

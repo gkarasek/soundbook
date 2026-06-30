@@ -29,8 +29,8 @@ public struct ContentView: View {
             Spacer(minLength: 0)
             SoundGridView(
                 sounds: viewModel.visibleSounds,
-                activeSoundID: viewModel.activeSoundID,
-                onSoundTapped: viewModel.onSoundTapped
+                onSoundPressBegan: viewModel.onSoundPressBegan,
+                onSoundPressEnded: viewModel.onSoundPressEnded
             )
             .padding(.horizontal, 24)
             .id(viewModel.selectedLibraryID)

@@ -4,9 +4,17 @@ import AVFoundation
 class AudioEngine {
     static let shared = AudioEngine()
 
+    static let effectVolume: Float = 1.0
+    /// Background ambience sits 40% below foreground effects.
+    static let backgroundVolume: Float = 0.6
+    static let fadeDuration: TimeInterval = 1.0
+
     private let audioSession = AVAudioSession.sharedInstance()
-    private var currentPlayer: AVAudioPlayer?
-    private var currentURL: URL?
+    private var effectPlayer: AVAudioPlayer?
+    private var effectURL: URL?
+    private var backgroundPlayer: AVAudioPlayer?
+    private var backgroundURL: URL?
+    private var effectFadeTimer: Timer?
 
     init() {
         configureAudioSession()
@@ -22,23 +30,52 @@ class AudioEngine {
         }
     }
 
-    /// Play a single sound and stop any currently active one.
+    /// Play a single looping sound effect and stop any currently active foreground effect.
     /// Returns false when the file cannot be played.
     @discardableResult
     func playExclusive(from soundURL: URL) -> Bool {
-        stopCurrent()
+        stopCurrentImmediately()
 
         do {
             let audioPlayer = try AVAudioPlayer(contentsOf: soundURL)
+            audioPlayer.numberOfLoops = -1
+            audioPlayer.volume = 0
             audioPlayer.prepareToPlay()
             audioPlayer.play()
-            currentPlayer = audioPlayer
-            currentURL = soundURL
+            effectPlayer = audioPlayer
+            effectURL = soundURL
+            fadeEffectVolume(to: Self.effectVolume, duration: Self.fadeDuration)
             return true
         } catch {
             print("Error playing sound: \(error.localizedDescription)")
-            currentPlayer = nil
-            currentURL = nil
+            effectPlayer = nil
+            effectURL = nil
+            return false
+        }
+    }
+
+    /// Loop gallery ambience underneath foreground effects.
+    @discardableResult
+    func playBackground(from soundURL: URL) -> Bool {
+        if backgroundURL == soundURL, backgroundPlayer?.isPlaying == true {
+            return true
+        }
+
+        stopBackground()
+
+        do {
+            let audioPlayer = try AVAudioPlayer(contentsOf: soundURL)
+            audioPlayer.numberOfLoops = -1
+            audioPlayer.volume = Self.backgroundVolume
+            audioPlayer.prepareToPlay()
+            audioPlayer.play()
+            backgroundPlayer = audioPlayer
+            backgroundURL = soundURL
+            return true
+        } catch {
+            print("Error playing background sound: \(error.localizedDescription)")
+            backgroundPlayer = nil
+            backgroundURL = nil
             return false
         }
     }
@@ -50,31 +87,91 @@ class AudioEngine {
         return playExclusive(from: soundURL)
     }
 
+    func fadeOutAndStopCurrent() {
+        guard effectPlayer != nil else { return }
+
+        fadeEffectVolume(to: 0, duration: Self.fadeDuration) { [weak self] in
+            self?.stopCurrentImmediately()
+        }
+    }
+
+    func stopCurrentImmediately() {
+        cancelEffectFade()
+        effectPlayer?.stop()
+        effectPlayer = nil
+        effectURL = nil
+    }
+
     func stopCurrent() {
-        currentPlayer?.stop()
-        currentPlayer = nil
-        currentURL = nil
+        fadeOutAndStopCurrent()
+    }
+
+    func stopBackground() {
+        backgroundPlayer?.stop()
+        backgroundPlayer = nil
+        backgroundURL = nil
     }
 
     func stopAllAudio() {
-        stopCurrent()
+        stopCurrentImmediately()
+        stopBackground()
     }
 
     func pauseAllAudio() {
-        currentPlayer?.pause()
+        cancelEffectFade()
+        effectPlayer?.pause()
+        backgroundPlayer?.pause()
     }
 
     func resumeAllAudio() {
-        currentPlayer?.play()
+        effectPlayer?.play()
+        backgroundPlayer?.play()
     }
 
     func isPlayingCurrentSound() -> Bool {
-        currentPlayer?.isPlaying == true
+        effectPlayer?.isPlaying == true
     }
 
     func isPlaying(soundURL: URL) -> Bool {
-        guard let currentURL else { return false }
-        return currentURL == soundURL && isPlayingCurrentSound()
+        guard let effectURL else { return false }
+        return effectURL == soundURL && isPlayingCurrentSound()
+    }
+
+    private func cancelEffectFade() {
+        effectFadeTimer?.invalidate()
+        effectFadeTimer = nil
+    }
+
+    private func fadeEffectVolume(
+        to target: Float,
+        duration: TimeInterval,
+        completion: (() -> Void)? = nil
+    ) {
+        cancelEffectFade()
+
+        guard let player = effectPlayer else {
+            completion?()
+            return
+        }
+
+        let startVolume = player.volume
+        let startTime = Date()
+
+        effectFadeTimer = Timer.scheduledTimer(withTimeInterval: 1.0 / 60.0, repeats: true) { [weak self] timer in
+            guard let self, let player = self.effectPlayer else {
+                timer.invalidate()
+                completion?()
+                return
+            }
+
+            let progress = min(1.0, Date().timeIntervalSince(startTime) / duration)
+            player.volume = startVolume + Float(progress) * (target - startVolume)
+
+            if progress >= 1.0 {
+                timer.invalidate()
+                self.effectFadeTimer = nil
+                completion?()
+            }
+        }
     }
 }
-
