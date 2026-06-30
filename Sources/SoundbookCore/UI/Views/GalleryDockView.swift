@@ -7,7 +7,9 @@ struct GalleryDockView: View {
 
     private let pillHeight: CGFloat = 80
     private let dockCornerRadius: CGFloat = 96
-    private let selectionAnimation = Animation.spring(response: 0.38, dampingFraction: 0.82)
+    private let dockPadding: CGFloat = 8
+    private let dockTrackID = "dockTrack"
+    private let selectionAnimation = Animation.spring(response: 0.38, dampingFraction: 0.86)
 
     var body: some View {
         ScrollViewReader { proxy in
@@ -32,12 +34,8 @@ struct GalleryDockView: View {
                         .accessibilityAddTraits(isSelected ? .isSelected : [])
                     }
                 }
-                .padding(8)
-            }
-            .onAppear {
-                if let selectedLibraryID {
-                    scrollToLibrary(selectedLibraryID, proxy: proxy, animated: false)
-                }
+                .padding(dockPadding)
+                .id(dockTrackID)
             }
             .onChange(of: selectedLibraryID) { newValue in
                 guard let newValue else { return }
@@ -62,23 +60,30 @@ struct GalleryDockView: View {
         proxy: ScrollViewProxy,
         animated: Bool
     ) {
-        let anchor = scrollAnchor(for: id)
+        guard let index = libraries.firstIndex(where: { $0.id == id }) else { return }
+
+        let scroll: () -> Void
+        if index == 0 {
+            scroll = { proxy.scrollTo(dockTrackID, anchor: .leading) }
+        } else if index == libraries.count - 1 {
+            scroll = { proxy.scrollTo(dockTrackID, anchor: .trailing) }
+        } else {
+            scroll = { proxy.scrollTo(id, anchor: .center) }
+        }
+
         if animated {
             withAnimation(selectionAnimation) {
-                proxy.scrollTo(id, anchor: anchor)
+                scroll()
+            }
+            guard index == 0 || index == libraries.count - 1 else { return }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.36) {
+                withAnimation(selectionAnimation) {
+                    scroll()
+                }
             }
         } else {
-            proxy.scrollTo(id, anchor: anchor)
+            scroll()
         }
-    }
-
-    private func scrollAnchor(for id: SoundLibraryModel.ID) -> UnitPoint {
-        guard let index = libraries.firstIndex(where: { $0.id == id }) else {
-            return .center
-        }
-        if index == 0 { return UnitPoint(x: 0, y: 0.5) }
-        if index == libraries.count - 1 { return UnitPoint(x: 1, y: 0.5) }
-        return .center
     }
 }
 
@@ -89,53 +94,49 @@ private struct GalleryDockPill: View {
 
     private let selectedWidth: CGFloat = 240
     private let idleWidth: CGFloat = 160
-    private var pillCornerRadius: CGFloat { height / 2 }
 
-    var body: some View {
-        ZStack {
-            pillFill
-            if isSelected {
-                selectedAccent
-            }
-        }
-        .frame(width: isSelected ? selectedWidth : idleWidth, height: height)
-        .overlay(pillBorder)
-        .clipShape(RoundedRectangle(cornerRadius: pillCornerRadius, style: .continuous))
-        .animation(.spring(response: 0.38, dampingFraction: 0.82), value: isSelected)
-    }
-
-    @ViewBuilder
-    private var pillFill: some View {
-        if isSelected {
-            LinearGradient(
-                colors: [
-                    Color(red: 0.18, green: 0.50, blue: 0.48),
-                    Color(red: 0.06, green: 0.20, blue: 0.26),
-                ],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-        } else {
-            Color(red: 0.74, green: 0.45, blue: 0.24)
-        }
-    }
-
-    private var selectedAccent: some View {
-        RoundedRectangle(cornerRadius: pillCornerRadius - 8, style: .continuous)
-            .fill(SoundTileGradients.dockGradient(for: library.iconStyle))
-            .padding(10)
-            .opacity(0.35)
-    }
-
-    private var pillBorder: some View {
-        RoundedRectangle(cornerRadius: pillCornerRadius, style: .continuous)
-            .stroke(borderColor, lineWidth: isSelected ? 3 : 1)
+    private var idleColor: Color { Color(red: 0.74, green: 0.45, blue: 0.24) }
+    private var selectedGradient: LinearGradient {
+        LinearGradient(
+            colors: [
+                Color(red: 0.18, green: 0.50, blue: 0.48),
+                Color(red: 0.06, green: 0.20, blue: 0.26),
+            ],
+            startPoint: .top,
+            endPoint: .bottom
+        )
     }
 
     private var borderColor: Color {
         isSelected
             ? Color(red: 0.18, green: 0.85, blue: 0.32).opacity(0.8)
             : Color.white.opacity(0.2)
+    }
+
+    var body: some View {
+        ZStack {
+            Capsule()
+                .fill(idleColor)
+
+            Capsule()
+                .fill(selectedGradient)
+                .opacity(isSelected ? 1 : 0)
+
+            Capsule()
+                .fill(SoundTileGradients.dockGradient(for: library.iconStyle))
+                .padding(10)
+                .opacity(isSelected ? 0.35 : 0)
+        }
+        .frame(width: isSelected ? selectedWidth : idleWidth, height: height)
+        .overlay(
+            Capsule()
+                .strokeBorder(borderColor, lineWidth: isSelected ? 3 : 1)
+        )
+        .animation(selectionAnimation, value: isSelected)
+    }
+
+    private var selectionAnimation: Animation {
+        .spring(response: 0.38, dampingFraction: 0.86)
     }
 }
 
