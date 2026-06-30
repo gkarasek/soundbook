@@ -2,8 +2,8 @@ import SwiftUI
 
 struct SoundGridView: View {
     let sounds: [SoundItem]
-    let activeSoundID: SoundItem.ID?
-    let onSoundTapped: (SoundItem) -> Void
+    let onSoundPressBegan: (SoundItem) -> Void
+    let onSoundPressEnded: () -> Void
 
     private let columns = 7
     private let rows = 12
@@ -40,11 +40,10 @@ struct SoundGridView: View {
 
         SoundTileButton(
             sound: sound,
-            isActive: activeSoundID == sound.id,
-            shape: tileShape(for: placement)
-        ) {
-            onSoundTapped(sound)
-        }
+            shape: tileShape(for: placement),
+            onPressBegan: { onSoundPressBegan(sound) },
+            onPressEnded: onSoundPressEnded
+        )
         .frame(width: tileWidth, height: tileHeight)
         .position(x: x, y: y)
     }
@@ -71,27 +70,36 @@ struct SoundTileButton: View {
     }
 
     let sound: SoundItem
-    let isActive: Bool
     var shape: ShapeStyle = .roundedRectangle(cornerRadius: 48)
-    let action: () -> Void
+    let onPressBegan: () -> Void
+    let onPressEnded: () -> Void
 
     var body: some View {
-        Button(action: action) {
-            ZStack {
-                tileBackground
-                    .overlay(tileBorder)
+        let tile = ZStack {
+            tileBackground
+                .overlay(tileBorder)
 
-                Text(sound.name)
-                    .font(.caption.weight(.semibold))
-                    .foregroundColor(Color.white.opacity(0.85))
-                    .multilineTextAlignment(.center)
-                    .padding(12)
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .shadow(color: .black.opacity(0.35), radius: 10, y: 8)
+            Text(sound.name)
+                .font(.caption.weight(.semibold))
+                .foregroundColor(Color.white.opacity(0.85))
+                .multilineTextAlignment(.center)
+                .padding(12)
         }
-        .buttonStyle(.plain)
-        .accessibilityLabel(Text(sound.name))
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .shadow(color: .black.opacity(0.35), radius: 10, y: 8)
+
+        switch shape {
+        case .circle:
+            tile
+                .contentShape(Circle())
+                .accessibilityLabel(Text(sound.name))
+                .pressToPlay(onPressBegan: onPressBegan, onPressEnded: onPressEnded)
+        case .roundedRectangle(let cornerRadius):
+            tile
+                .contentShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
+                .accessibilityLabel(Text(sound.name))
+                .pressToPlay(onPressBegan: onPressBegan, onPressEnded: onPressEnded)
+        }
     }
 
     @ViewBuilder
@@ -111,17 +119,25 @@ struct SoundTileButton: View {
         switch shape {
         case .circle:
             Circle()
-                .stroke(
-                    isActive ? Color(red: 0.18, green: 0.85, blue: 0.32).opacity(0.9) : Color.white.opacity(0.2),
-                    lineWidth: isActive ? 3 : 1
-                )
+                .stroke(Color.white.opacity(0.2), lineWidth: 1)
         case .roundedRectangle(let cornerRadius):
             RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                .stroke(
-                    isActive ? Color(red: 0.18, green: 0.85, blue: 0.32).opacity(0.9) : Color.white.opacity(0.2),
-                    lineWidth: isActive ? 3 : 1
-                )
+                .stroke(Color.white.opacity(0.2), lineWidth: 1)
         }
+    }
+}
+
+private extension View {
+    func pressToPlay(onPressBegan: @escaping () -> Void, onPressEnded: @escaping () -> Void) -> some View {
+        onLongPressGesture(minimumDuration: 0, pressing: { isPressing in
+            if isPressing {
+                onPressBegan()
+            } else {
+                onPressEnded()
+            }
+        }, perform: {})
+        .accessibilityAddTraits(.startsMediaSession)
+        .accessibilityHint(Text("Press and hold to play"))
     }
 }
 
