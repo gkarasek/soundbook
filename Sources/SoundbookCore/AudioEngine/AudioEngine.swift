@@ -15,6 +15,7 @@ class AudioEngine {
     private var backgroundPlayer: AVAudioPlayer?
     private var backgroundURL: URL?
     private var effectFadeTimer: Timer?
+    private var backgroundFadeTimer: Timer?
 
     init() {
         configureAudioSession()
@@ -61,22 +62,35 @@ class AudioEngine {
             return true
         }
 
-        stopBackground()
+        stopBackgroundImmediately()
 
         do {
             let audioPlayer = try AVAudioPlayer(contentsOf: soundURL)
             audioPlayer.numberOfLoops = -1
-            audioPlayer.volume = Self.backgroundVolume
+            audioPlayer.volume = 0
             audioPlayer.prepareToPlay()
             audioPlayer.play()
             backgroundPlayer = audioPlayer
             backgroundURL = soundURL
+            fadeBackgroundVolume(to: Self.backgroundVolume, duration: Self.fadeDuration)
             return true
         } catch {
             print("Error playing background sound: \(error.localizedDescription)")
             backgroundPlayer = nil
             backgroundURL = nil
             return false
+        }
+    }
+
+    func fadeOutAndStopBackground(completion: (() -> Void)? = nil) {
+        guard backgroundPlayer != nil else {
+            completion?()
+            return
+        }
+
+        fadeBackgroundVolume(to: 0, duration: Self.fadeDuration) { [weak self] in
+            self?.stopBackgroundImmediately()
+            completion?()
         }
     }
 
@@ -96,6 +110,11 @@ class AudioEngine {
     }
 
     func stopBackground() {
+        fadeOutAndStopBackground()
+    }
+
+    private func stopBackgroundImmediately() {
+        cancelBackgroundFade()
         backgroundPlayer?.stop()
         backgroundPlayer = nil
         backgroundURL = nil
@@ -104,6 +123,44 @@ class AudioEngine {
     private func cancelEffectFade() {
         effectFadeTimer?.invalidate()
         effectFadeTimer = nil
+    }
+
+    private func cancelBackgroundFade() {
+        backgroundFadeTimer?.invalidate()
+        backgroundFadeTimer = nil
+    }
+
+    private func fadeBackgroundVolume(
+        to target: Float,
+        duration: TimeInterval,
+        completion: (() -> Void)? = nil
+    ) {
+        cancelBackgroundFade()
+
+        guard let player = backgroundPlayer else {
+            completion?()
+            return
+        }
+
+        let startVolume = player.volume
+        let startTime = Date()
+
+        backgroundFadeTimer = Timer.scheduledTimer(withTimeInterval: 1.0 / 60.0, repeats: true) { [weak self] timer in
+            guard let self, let player = self.backgroundPlayer else {
+                timer.invalidate()
+                completion?()
+                return
+            }
+
+            let progress = min(1.0, Date().timeIntervalSince(startTime) / duration)
+            player.volume = startVolume + Float(progress) * (target - startVolume)
+
+            if progress >= 1.0 {
+                timer.invalidate()
+                self.backgroundFadeTimer = nil
+                completion?()
+            }
+        }
     }
 
     private func fadeEffectVolume(
