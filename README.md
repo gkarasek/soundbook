@@ -27,7 +27,7 @@ Add **`.mp3` (or other) files** to the app bundle matching the `fileName` values
 |------|------|
 | [`SoundbookApp/`](SoundbookApp/) | `@main` app entry, `Info.plist`, bundle ID |
 | [`Soundbook.xcodeproj/`](Soundbook.xcodeproj/) | Xcode project and shared scheme |
-| [`Sources/SoundbookCore/`](Sources/SoundbookCore/) | Models, sound catalog, audio engine, SwiftUI views and view models |
+| [`Sources/SoundbookCore/`](Sources/SoundbookCore/) | Audio engine, sound catalog, theme, SwiftUI views and view model |
 | [`Package.swift`](Package.swift) | Declares the `SoundbookCore` library for SwiftPM |
 
 ## Getting started
@@ -60,23 +60,25 @@ To open only the package (e.g. for SwiftPM tooling): `open Package.swift`.
 ```mermaid
 flowchart LR
     ContentView --> SoundboardVM[SoundboardViewModel]
+    ContentView --> SoundGridView
+    ContentView --> GalleryDockView
     SoundboardVM --> SoundLibrary
     SoundboardVM --> AudioEngine
+    SoundGridView --> Theme
+    GalleryDockView --> Theme
 ```
 
-- **ContentView**: Full-screen dark layout, scrollable tile grid, bottom library bar.
-- **SoundboardViewModel**: Selected library, active sound ID, tap-to-toggle and URL resolution for bundle audio.
+- **ContentView**: Full-screen dark layout, sound tile grid, bottom library dock.
+- **SoundboardViewModel**: Selected library, press-to-play, URL resolution for bundle audio.
 - **SoundLibrary**: In-memory `SoundLibraryModel` / `SoundItem` definitions per library.
-- **AudioEngine**: Single active player; `playExclusive` / `stopCurrent` for exclusive playback.
-
-Legacy **reading session** types (`BookSession`, `BookSessionViewModel`, optional session screens) remain in the package for reference but are not used by the root app flow.
+- **AudioEngine**: Foreground effects with fade, looping background ambience.
+- **Theme**: Shared colors, gradients, and animation constants.
 
 ## Roadmap / ideas
 
 Possible future directions (not implemented today):
 
-- Sync ambient sounds with audiobook narration or reading position
-- Persistence for sessions or custom libraries (e.g. Core Data / files)
+- Persistence for custom libraries (e.g. Core Data / files)
 - Per-sound volume, mixing multiple layers, or looping policies
 - Replace gradient tiles with bundled illustration assets per sound and library
 

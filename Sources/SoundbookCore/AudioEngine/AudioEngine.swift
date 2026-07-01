@@ -80,13 +80,6 @@ class AudioEngine {
         }
     }
 
-    /// Compatibility shim for previous call sites.
-    @discardableResult
-    func playSoundEffect(from soundURL: URL, atTime: TimeInterval = 0) -> Bool {
-        _ = atTime // Reserved for future scheduling behavior.
-        return playExclusive(from: soundURL)
-    }
-
     func fadeOutAndStopCurrent() {
         guard effectPlayer != nil else { return }
 
@@ -102,39 +95,10 @@ class AudioEngine {
         effectURL = nil
     }
 
-    func stopCurrent() {
-        fadeOutAndStopCurrent()
-    }
-
     func stopBackground() {
         backgroundPlayer?.stop()
         backgroundPlayer = nil
         backgroundURL = nil
-    }
-
-    func stopAllAudio() {
-        stopCurrentImmediately()
-        stopBackground()
-    }
-
-    func pauseAllAudio() {
-        cancelEffectFade()
-        effectPlayer?.pause()
-        backgroundPlayer?.pause()
-    }
-
-    func resumeAllAudio() {
-        effectPlayer?.play()
-        backgroundPlayer?.play()
-    }
-
-    func isPlayingCurrentSound() -> Bool {
-        effectPlayer?.isPlaying == true
-    }
-
-    func isPlaying(soundURL: URL) -> Bool {
-        guard let effectURL else { return false }
-        return effectURL == soundURL && isPlayingCurrentSound()
     }
 
     private func cancelEffectFade() {

@@ -47,7 +47,9 @@ public struct ContentView: View {
             selectedLibraryID: viewModel.selectedLibraryID,
             onSelectLibrary: viewModel.selectLibrary
         )
-        .padding(24)
+        .padding(.horizontal, 24)
+        .padding(.top, 24)
+        .padding(.bottom, 8)
     }
 }
 

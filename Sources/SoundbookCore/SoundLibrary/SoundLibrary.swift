@@ -154,8 +154,4 @@ class SoundLibrary {
             ),
         ]
     }
-
-    func library(withID id: SoundLibraryModel.ID) -> SoundLibraryModel? {
-        libraries.first { $0.id == id }
-    }
 }
