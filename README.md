@@ -82,9 +82,6 @@ Possible future directions (not implemented today):
 - Per-sound volume, mixing multiple layers, or looping policies
 - Replace gradient tiles with bundled illustration assets per sound and library
 
-## Contributing
-
-Contributions are welcome. Please open pull requests against `main`.
 
 ## License
 
