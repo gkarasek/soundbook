@@ -2,6 +2,7 @@ import SwiftUI
 
 struct SoundGridView: View {
     let sounds: [SoundItem]
+    var entranceProgress: CGFloat = 1
     let onSoundPressBegan: (SoundItem) -> Void
     let onSoundPressEnded: () -> Void
 
@@ -38,6 +39,8 @@ struct SoundGridView: View {
         let x = CGFloat(placement.column) * (cellSize + gap) + tileWidth / 2
         let y = CGFloat(placement.row) * (cellSize + gap) + tileHeight / 2
 
+        let tileEntrance = tileEntranceProgress(for: placement)
+
         SoundTileButton(
             sound: sound,
             shape: tileShape(for: placement),
@@ -45,7 +48,9 @@ struct SoundGridView: View {
             onPressEnded: onSoundPressEnded
         )
         .frame(width: tileWidth, height: tileHeight)
-        .position(x: x, y: y)
+        .scaleEffect(0.92 + tileEntrance * 0.08)
+        .opacity(Double(tileEntrance))
+        .position(x: x, y: y + (1 - tileEntrance) * 18)
     }
 
     /// Equal column/row span on a square-cell grid produces a square tile → circle.
@@ -54,6 +59,14 @@ struct SoundGridView: View {
             return .circle
         }
         return .roundedRectangle(cornerRadius: rectangleCornerRadius)
+    }
+
+    private func tileEntranceProgress(for placement: SoundGridPlacement) -> CGFloat {
+        let rowWeight = CGFloat(placement.row) / 11
+        let columnWeight = CGFloat(placement.column) / 6
+        let delay = rowWeight * 0.55 + columnWeight * 0.2
+        let shifted = (entranceProgress - delay) / max(0.001, 1 - delay)
+        return min(1, max(0, shifted))
     }
 
     /// Width-to-height ratio for square cells with uniform gaps (reference width 360pt).
@@ -138,8 +151,8 @@ struct SoundTileButton: View {
     private var pressGradient: LinearGradient {
         LinearGradient(
             colors: isPressed
-                ? [Color.black.opacity(0.6), Color.clear]
-                : [Color.clear, Color.black.opacity(0.6)],
+                ? [AppColors.holdOverlayTop.opacity(0.3), AppColors.offWhite.opacity(0)]
+                : [AppColors.offWhite.opacity(0), AppColors.holdOverlayTop.opacity(0.6)],
             startPoint: .top,
             endPoint: .bottom
         )
