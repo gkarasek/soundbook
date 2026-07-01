@@ -14,6 +14,7 @@
 		A0B0C0D0E0F00112233446E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B0C0D0E0F001122334474 /* ContentView.swift */; };
 		A0B0C0D0E0F001122334490 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B0C0D0E0F001122334491 /* SplashView.swift */; };
 		A0B0C0D0E0F001122334492 /* AppRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B0C0D0E0F001122334493 /* AppRootView.swift */; };
+		A0B0C0D0E0F001122334494 /* NoiseTextureOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B0C0D0E0F001122334495 /* NoiseTextureOverlay.swift */; };
 		A0B0C0D0E0F001122334480 /* SoundGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B0C0D0E0F001122334481 /* SoundGridView.swift */; };
 		A0B0C0D0E0F001122334482 /* GalleryDockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B0C0D0E0F001122334483 /* GalleryDockView.swift */; };
 		C1D2E3F4A5B601122334485 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1D2E3F4A5B601122334484 /* Theme.swift */; };
@@ -38,6 +39,7 @@
 		A0B0C0D0E0F001122334474 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		A0B0C0D0E0F001122334491 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		A0B0C0D0E0F001122334493 /* AppRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRootView.swift; sourceTree = "<group>"; };
+		A0B0C0D0E0F001122334495 /* NoiseTextureOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoiseTextureOverlay.swift; sourceTree = "<group>"; };
 		A0B0C0D0E0F001122334481 /* SoundGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundGridView.swift; sourceTree = "<group>"; };
 		A0B0C0D0E0F001122334483 /* GalleryDockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryDockView.swift; sourceTree = "<group>"; };
 		C1D2E3F4A5B601122334484 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
@@ -151,6 +153,7 @@
 				A0B0C0D0E0F001122334493 /* AppRootView.swift */,
 				A0B0C0D0E0F001122334474 /* ContentView.swift */,
 				A0B0C0D0E0F001122334491 /* SplashView.swift */,
+				A0B0C0D0E0F001122334495 /* NoiseTextureOverlay.swift */,
 				A0B0C0D0E0F001122334481 /* SoundGridView.swift */,
 				A0B0C0D0E0F001122334483 /* GalleryDockView.swift */,
 			);
@@ -275,6 +278,7 @@
 				A0B0C0D0E0F00112233446E /* ContentView.swift in Sources */,
 				A0B0C0D0E0F001122334490 /* SplashView.swift in Sources */,
 				A0B0C0D0E0F001122334492 /* AppRootView.swift in Sources */,
+				A0B0C0D0E0F001122334494 /* NoiseTextureOverlay.swift in Sources */,
 				A0B0C0D0E0F001122334480 /* SoundGridView.swift in Sources */,
 				A0B0C0D0E0F001122334482 /* GalleryDockView.swift in Sources */,
 			);

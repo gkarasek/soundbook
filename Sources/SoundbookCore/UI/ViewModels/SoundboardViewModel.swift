@@ -5,29 +5,23 @@ import SwiftUI
 final class SoundboardViewModel: ObservableObject {
     @Published private(set) var libraries: [SoundLibraryModel]
     @Published var selectedLibraryID: SoundLibraryModel.ID?
+    @Published private(set) var isBackgroundPlaying = false
 
     private let audioEngine: AudioEngine
-    private let deferBackgroundAudio: Bool
     private var gallerySessionStarted = false
 
     init(
         soundLibrary: SoundLibrary = .shared,
-        audioEngine: AudioEngine = .shared,
-        deferBackgroundAudio: Bool = false
+        audioEngine: AudioEngine = .shared
     ) {
         self.libraries = soundLibrary.libraries
         self.selectedLibraryID = soundLibrary.libraries.first?.id
         self.audioEngine = audioEngine
-        self.deferBackgroundAudio = deferBackgroundAudio
-        if !deferBackgroundAudio {
-            startBackgroundForSelectedLibrary()
-        }
     }
 
     func beginGallerySession() {
         guard !gallerySessionStarted else { return }
         gallerySessionStarted = true
-        startBackgroundForSelectedLibrary()
     }
 
     var selectedLibrary: SoundLibraryModel? {
@@ -45,8 +39,14 @@ final class SoundboardViewModel: ObservableObject {
     }
 
     func selectLibrary(_ library: SoundLibraryModel) {
+        if selectedLibraryID == library.id {
+            toggleBackgroundAudio()
+            return
+        }
+
         selectedLibraryID = library.id
         stopActiveSound()
+        isBackgroundPlaying = true
         startBackground(for: library)
     }
 
@@ -67,15 +67,23 @@ final class SoundboardViewModel: ObservableObject {
         audioEngine.fadeOutAndStopCurrent()
     }
 
-    private func startBackgroundForSelectedLibrary() {
+    private func toggleBackgroundAudio() {
+        if isBackgroundPlaying {
+            isBackgroundPlaying = false
+            audioEngine.fadeOutAndStopBackground()
+            return
+        }
+
         guard let library = selectedLibrary else { return }
+        isBackgroundPlaying = true
         startBackground(for: library)
     }
 
     private func startBackground(for library: SoundLibraryModel) {
         guard let fileName = library.backgroundFileName,
               let soundURL = resolveAudioURL(for: fileName) else {
-            audioEngine.stopBackground()
+            isBackgroundPlaying = false
+            audioEngine.fadeOutAndStopBackground()
             return
         }
 

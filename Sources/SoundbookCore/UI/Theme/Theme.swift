@@ -4,9 +4,12 @@ enum AppColors {
     static let offWhite = Color(red: 241 / 255, green: 241 / 255, blue: 241 / 255)
     static let splashTop = Color(red: 30 / 255, green: 30 / 255, blue: 30 / 255)
     static let holdOverlayTop = Color(red: 17 / 255, green: 17 / 255, blue: 17 / 255)
+    static let noiseOverlayOpacity = 0.075
 }
 
 enum AppAnimations {
+    static let backgroundFadeDuration: TimeInterval = 1.0
+    static let backgroundFade = Animation.easeInOut(duration: backgroundFadeDuration)
     static let dockSelection = Animation.spring(response: 0.38, dampingFraction: 0.86)
     static let splashIntro = Animation.spring(response: 0.95, dampingFraction: 0.82)
     static let splashExit = Animation.timingCurve(0.22, 1, 0.36, 1, duration: 0.88)

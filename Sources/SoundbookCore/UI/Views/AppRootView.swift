@@ -1,7 +1,7 @@
 import SwiftUI
 
 public struct AppRootView: View {
-    @StateObject private var viewModel = SoundboardViewModel(deferBackgroundAudio: true)
+    @StateObject private var viewModel = SoundboardViewModel()
     @State private var logoReveal: CGFloat = 0
     @State private var dismissProgress: CGFloat = 0
     @State private var galleryReveal: CGFloat = 0
@@ -27,6 +27,9 @@ public struct AppRootView: View {
                 .opacity(Double(1 - dismissProgress))
                 .zIndex(1)
             }
+
+            NoiseTextureOverlay()
+                .zIndex(2)
         }
         .onAppear(perform: startLaunchSequenceIfNeeded)
     }

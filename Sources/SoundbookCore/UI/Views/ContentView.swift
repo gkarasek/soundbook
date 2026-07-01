@@ -53,6 +53,7 @@ public struct ContentView: View {
         GalleryDockView(
             libraries: viewModel.libraries,
             selectedLibraryID: viewModel.selectedLibraryID,
+            isBackgroundPlaying: viewModel.isBackgroundPlaying,
             onSelectLibrary: viewModel.selectLibrary
         )
         .padding(.horizontal, 24)
