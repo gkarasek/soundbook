@@ -2,28 +2,6 @@ import Foundation
 import SwiftUI
 
 @MainActor
-final class BookSessionViewModel: ObservableObject {
-    @Published var sessions: [BookSession] = []
-
-    func createSession(title: String, bookTitle: String, audioURL: URL? = nil) {
-        let newSession = BookSession(
-            id: UUID(),
-            title: title,
-            bookTitle: bookTitle,
-            audioURL: audioURL,
-            soundMappings: [],
-            createdAt: Date(),
-            updatedAt: Date()
-        )
-        sessions.append(newSession)
-    }
-
-    func deleteSession(at offsets: IndexSet) {
-        sessions.remove(atOffsets: offsets)
-    }
-}
-
-@MainActor
 final class SoundboardViewModel: ObservableObject {
     @Published private(set) var libraries: [SoundLibraryModel]
     @Published var selectedLibraryID: SoundLibraryModel.ID?

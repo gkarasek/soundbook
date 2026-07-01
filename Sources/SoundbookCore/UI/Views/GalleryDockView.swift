@@ -9,7 +9,6 @@ struct GalleryDockView: View {
     private let dockCornerRadius: CGFloat = 96
     private let dockPadding: CGFloat = 8
     private let dockTrackID = "dockTrack"
-    private let selectionAnimation = Animation.spring(response: 0.38, dampingFraction: 0.86)
 
     var body: some View {
         ScrollViewReader { proxy in
@@ -18,7 +17,7 @@ struct GalleryDockView: View {
                     ForEach(libraries) { library in
                         let isSelected = selectedLibraryID == library.id
                         Button {
-                            withAnimation(selectionAnimation) {
+                            withAnimation(AppAnimations.dockSelection) {
                                 onSelectLibrary(library)
                             }
                         } label: {
@@ -48,10 +47,10 @@ struct GalleryDockView: View {
 
     private var dockBackground: some View {
         RoundedRectangle(cornerRadius: dockCornerRadius, style: .continuous)
-            .fill(Color.white.opacity(0.1))
+            .fill(AppColors.offWhite.opacity(0.1))
             .overlay(
                 RoundedRectangle(cornerRadius: dockCornerRadius, style: .continuous)
-                    .stroke(Color.white.opacity(0.1), lineWidth: 2)
+                    .stroke(AppColors.offWhite.opacity(0.2), lineWidth: 1)
             )
     }
 
@@ -72,12 +71,12 @@ struct GalleryDockView: View {
         }
 
         if animated {
-            withAnimation(selectionAnimation) {
+            withAnimation(AppAnimations.dockSelection) {
                 scroll()
             }
             guard index == 0 || index == libraries.count - 1 else { return }
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.36) {
-                withAnimation(selectionAnimation) {
+                withAnimation(AppAnimations.dockSelection) {
                     scroll()
                 }
             }
@@ -95,12 +94,12 @@ private struct GalleryDockPill: View {
     private let selectedWidth: CGFloat = 240
     private let idleWidth: CGFloat = 160
 
-    private var idleColor: Color { Color(red: 0.74, green: 0.45, blue: 0.24) }
+    private var idleColor: Color { Color(red: 189 / 255, green: 115 / 255, blue: 61 / 255) }
     private var selectedGradient: LinearGradient {
         LinearGradient(
             colors: [
-                Color(red: 0.18, green: 0.50, blue: 0.48),
-                Color(red: 0.06, green: 0.20, blue: 0.26),
+                Color(red: 46 / 255, green: 128 / 255, blue: 122 / 255),
+                Color(red: 15 / 255, green: 51 / 255, blue: 66 / 255),
             ],
             startPoint: .top,
             endPoint: .bottom
@@ -109,8 +108,8 @@ private struct GalleryDockPill: View {
 
     private var borderColor: Color {
         isSelected
-            ? Color(red: 0.18, green: 0.85, blue: 0.32).opacity(0.8)
-            : Color.white.opacity(0.2)
+            ? Color(red: 46 / 255, green: 217 / 255, blue: 82 / 255).opacity(0.8)
+            : AppColors.offWhite.opacity(0.4)
     }
 
     var body: some View {
@@ -130,13 +129,9 @@ private struct GalleryDockPill: View {
         .frame(width: isSelected ? selectedWidth : idleWidth, height: height)
         .overlay(
             Capsule()
-                .strokeBorder(borderColor, lineWidth: isSelected ? 3 : 1)
+                .strokeBorder(borderColor, lineWidth: isSelected ? 2 : 1)
         )
-        .animation(selectionAnimation, value: isSelected)
-    }
-
-    private var selectionAnimation: Animation {
-        .spring(response: 0.38, dampingFraction: 0.86)
+        .animation(AppAnimations.dockSelection, value: isSelected)
     }
 }
 

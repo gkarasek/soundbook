@@ -10,7 +10,7 @@ struct SoundGridView: View {
     private let gap: CGFloat = 8
 
     /// Fixed corner radius for non-square tiles (hero, wide strips, etc.).
-    private let rectangleCornerRadius: CGFloat = 48
+    private let rectangleCornerRadius: CGFloat = 54
 
     var body: some View {
         GeometryReader { geometry in
@@ -49,7 +49,7 @@ struct SoundGridView: View {
     }
 
     /// Equal column/row span on a square-cell grid produces a square tile → circle.
-    private func tileShape(for placement: SoundGridPlacement) -> SoundTileButton.ShapeStyle {
+    private func tileShape(for placement: SoundGridPlacement) -> TileShape {
         if placement.columnSpan == placement.rowSpan {
             return .circle
         }
@@ -63,21 +63,56 @@ struct SoundGridView: View {
     }
 }
 
-struct SoundTileButton: View {
-    enum ShapeStyle {
+struct TileShape: InsettableShape {
+    enum Kind {
         case circle
         case roundedRectangle(cornerRadius: CGFloat)
     }
 
+    let kind: Kind
+    var insetAmount: CGFloat = 0
+
+    static let circle = TileShape(kind: .circle)
+
+    static func roundedRectangle(cornerRadius: CGFloat) -> TileShape {
+        TileShape(kind: .roundedRectangle(cornerRadius: cornerRadius))
+    }
+
+    func path(in rect: CGRect) -> Path {
+        switch kind {
+        case .circle:
+            return Circle().path(in: rect)
+        case .roundedRectangle(let cornerRadius):
+            return RoundedRectangle(cornerRadius: cornerRadius, style: .continuous).path(in: rect)
+        }
+    }
+
+    func inset(by amount: CGFloat) -> TileShape {
+        var copy = self
+        copy.insetAmount += amount
+        return copy
+    }
+}
+
+struct SoundTileButton: View {
     let sound: SoundItem
-    var shape: ShapeStyle = .roundedRectangle(cornerRadius: 48)
+    var shape: TileShape = .roundedRectangle(cornerRadius: 54)
     let onPressBegan: () -> Void
     let onPressEnded: () -> Void
 
+    @State private var isPressed = false
+
     var body: some View {
-        let tile = ZStack {
-            tileBackground
-                .overlay(tileBorder)
+        ZStack {
+            shape
+                .fill(SoundTileGradients.gradient(for: sound.visualStyle))
+
+            shape
+                .fill(pressGradient)
+                .blendMode(.overlay)
+
+            shape
+                .stroke(AppColors.offWhite.opacity(0.2), lineWidth: 1)
 
             Text(sound.name)
                 .font(.caption.weight(.semibold))
@@ -86,44 +121,28 @@ struct SoundTileButton: View {
                 .padding(12)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .shadow(color: .black.opacity(0.35), radius: 10, y: 8)
-
-        switch shape {
-        case .circle:
-            tile
-                .contentShape(Circle())
-                .accessibilityLabel(Text(sound.name))
-                .pressToPlay(onPressBegan: onPressBegan, onPressEnded: onPressEnded)
-        case .roundedRectangle(let cornerRadius):
-            tile
-                .contentShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
-                .accessibilityLabel(Text(sound.name))
-                .pressToPlay(onPressBegan: onPressBegan, onPressEnded: onPressEnded)
-        }
+        .contentShape(shape)
+        .accessibilityLabel(Text(sound.name))
+        .pressToPlay(
+            onPressBegan: {
+                isPressed = true
+                onPressBegan()
+            },
+            onPressEnded: {
+                isPressed = false
+                onPressEnded()
+            }
+        )
     }
 
-    @ViewBuilder
-    private var tileBackground: some View {
-        switch shape {
-        case .circle:
-            Circle()
-                .fill(SoundTileGradients.gradient(for: sound.visualStyle))
-        case .roundedRectangle(let cornerRadius):
-            RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                .fill(SoundTileGradients.gradient(for: sound.visualStyle))
-        }
-    }
-
-    @ViewBuilder
-    private var tileBorder: some View {
-        switch shape {
-        case .circle:
-            Circle()
-                .stroke(Color.white.opacity(0.2), lineWidth: 1)
-        case .roundedRectangle(let cornerRadius):
-            RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                .stroke(Color.white.opacity(0.2), lineWidth: 1)
-        }
+    private var pressGradient: LinearGradient {
+        LinearGradient(
+            colors: isPressed
+                ? [Color.black.opacity(0.6), Color.clear]
+                : [Color.clear, Color.black.opacity(0.6)],
+            startPoint: .top,
+            endPoint: .bottom
+        )
     }
 }
 
@@ -138,59 +157,5 @@ private extension View {
         }, perform: {})
         .accessibilityAddTraits(.startsMediaSession)
         .accessibilityHint(Text("Press and hold to play"))
-    }
-}
-
-enum SoundTileGradients {
-    static func gradient(for style: SoundTileVisualStyle) -> LinearGradient {
-        switch style {
-        case .aurora:
-            return LinearGradient(colors: [Color(red: 0.52, green: 0.68, blue: 0.78), Color(red: 0.14, green: 0.26, blue: 0.40)], startPoint: .top, endPoint: .bottom)
-        case .nightForest:
-            return LinearGradient(colors: [Color(red: 0.16, green: 0.45, blue: 0.37), Color(red: 0.03, green: 0.16, blue: 0.28)], startPoint: .topLeading, endPoint: .bottomTrailing)
-        case .moonMist:
-            return LinearGradient(colors: [Color(red: 0.26, green: 0.41, blue: 0.46), Color(red: 0.08, green: 0.15, blue: 0.24)], startPoint: .topLeading, endPoint: .bottomTrailing)
-        case .leaves:
-            return LinearGradient(colors: [Color(red: 0.42, green: 0.20, blue: 0.14), Color(red: 0.15, green: 0.08, blue: 0.07)], startPoint: .topLeading, endPoint: .bottomTrailing)
-        case .canyon:
-            return LinearGradient(colors: [Color(red: 0.33, green: 0.21, blue: 0.16), Color(red: 0.09, green: 0.12, blue: 0.16)], startPoint: .topLeading, endPoint: .bottomTrailing)
-        case .fog:
-            return LinearGradient(colors: [Color(red: 0.18, green: 0.32, blue: 0.38), Color(red: 0.05, green: 0.09, blue: 0.14)], startPoint: .topLeading, endPoint: .bottomTrailing)
-        case .skyline:
-            return LinearGradient(colors: [Color(red: 0.17, green: 0.23, blue: 0.30), Color(red: 0.07, green: 0.09, blue: 0.13)], startPoint: .topLeading, endPoint: .bottomTrailing)
-        case .alley:
-            return LinearGradient(colors: [Color(red: 0.24, green: 0.19, blue: 0.26), Color(red: 0.08, green: 0.09, blue: 0.13)], startPoint: .topLeading, endPoint: .bottomTrailing)
-        case .siren:
-            return LinearGradient(colors: [Color(red: 0.41, green: 0.07, blue: 0.11), Color(red: 0.14, green: 0.05, blue: 0.13)], startPoint: .topLeading, endPoint: .bottomTrailing)
-        case .asphalt:
-            return LinearGradient(colors: [Color(red: 0.17, green: 0.19, blue: 0.24), Color(red: 0.07, green: 0.08, blue: 0.11)], startPoint: .topLeading, endPoint: .bottomTrailing)
-        case .station:
-            return LinearGradient(colors: [Color(red: 0.35, green: 0.18, blue: 0.11), Color(red: 0.14, green: 0.06, blue: 0.08)], startPoint: .topLeading, endPoint: .bottomTrailing)
-        case .rooftop:
-            return LinearGradient(colors: [Color(red: 0.20, green: 0.27, blue: 0.35), Color(red: 0.09, green: 0.11, blue: 0.16)], startPoint: .topLeading, endPoint: .bottomTrailing)
-        case .crossing:
-            return LinearGradient(colors: [Color(red: 0.22, green: 0.20, blue: 0.16), Color(red: 0.09, green: 0.08, blue: 0.08)], startPoint: .topLeading, endPoint: .bottomTrailing)
-        case .bridge:
-            return LinearGradient(colors: [Color(red: 0.12, green: 0.27, blue: 0.34), Color(red: 0.06, green: 0.09, blue: 0.15)], startPoint: .topLeading, endPoint: .bottomTrailing)
-        case .plaza:
-            return LinearGradient(colors: [Color(red: 0.30, green: 0.22, blue: 0.20), Color(red: 0.11, green: 0.08, blue: 0.08)], startPoint: .topLeading, endPoint: .bottomTrailing)
-        case .tunnel:
-            return LinearGradient(colors: [Color(red: 0.16, green: 0.16, blue: 0.18), Color(red: 0.06, green: 0.07, blue: 0.09)], startPoint: .topLeading, endPoint: .bottomTrailing)
-        }
-    }
-
-    static func dockGradient(for style: SoundTileVisualStyle) -> LinearGradient {
-        switch style {
-        case .nightForest:
-            return LinearGradient(colors: [Color(red: 0.18, green: 0.50, blue: 0.48), Color(red: 0.06, green: 0.20, blue: 0.26)], startPoint: .top, endPoint: .bottom)
-        case .skyline:
-            return LinearGradient(colors: [Color(red: 0.36, green: 0.25, blue: 0.45), Color(red: 0.17, green: 0.13, blue: 0.25)], startPoint: .topLeading, endPoint: .bottomTrailing)
-        case .bridge:
-            return LinearGradient(colors: [Color(red: 0.20, green: 0.45, blue: 0.52), Color(red: 0.08, green: 0.18, blue: 0.28)], startPoint: .top, endPoint: .bottom)
-        case .canyon:
-            return LinearGradient(colors: [Color(red: 0.74, green: 0.45, blue: 0.24), Color(red: 0.45, green: 0.28, blue: 0.14)], startPoint: .topLeading, endPoint: .bottomTrailing)
-        default:
-            return gradient(for: style)
-        }
     }
 }
