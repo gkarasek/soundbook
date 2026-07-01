@@ -7,14 +7,26 @@ final class SoundboardViewModel: ObservableObject {
     @Published var selectedLibraryID: SoundLibraryModel.ID?
 
     private let audioEngine: AudioEngine
+    private let deferBackgroundAudio: Bool
+    private var gallerySessionStarted = false
 
     init(
         soundLibrary: SoundLibrary = .shared,
-        audioEngine: AudioEngine = .shared
+        audioEngine: AudioEngine = .shared,
+        deferBackgroundAudio: Bool = false
     ) {
         self.libraries = soundLibrary.libraries
         self.selectedLibraryID = soundLibrary.libraries.first?.id
         self.audioEngine = audioEngine
+        self.deferBackgroundAudio = deferBackgroundAudio
+        if !deferBackgroundAudio {
+            startBackgroundForSelectedLibrary()
+        }
+    }
+
+    func beginGallerySession() {
+        guard !gallerySessionStarted else { return }
+        gallerySessionStarted = true
         startBackgroundForSelectedLibrary()
     }
 

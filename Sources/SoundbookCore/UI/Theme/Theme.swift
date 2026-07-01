@@ -2,10 +2,16 @@ import SwiftUI
 
 enum AppColors {
     static let offWhite = Color(red: 241 / 255, green: 241 / 255, blue: 241 / 255)
+    static let splashTop = Color(red: 30 / 255, green: 30 / 255, blue: 30 / 255)
+    static let holdOverlayTop = Color(red: 17 / 255, green: 17 / 255, blue: 17 / 255)
 }
 
 enum AppAnimations {
     static let dockSelection = Animation.spring(response: 0.38, dampingFraction: 0.86)
+    static let splashIntro = Animation.spring(response: 0.95, dampingFraction: 0.82)
+    static let splashExit = Animation.timingCurve(0.22, 1, 0.36, 1, duration: 0.88)
+    static let galleryReveal = Animation.timingCurve(0.16, 1, 0.3, 1, duration: 1.05)
+    static let galleryEntrance = Animation.spring(response: 0.62, dampingFraction: 0.84)
 }
 
 enum SoundTileGradients {
