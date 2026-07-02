@@ -5,6 +5,10 @@ enum AppColors {
     static let splashTop = Color(red: 30 / 255, green: 30 / 255, blue: 30 / 255)
     static let holdOverlayTop = Color(red: 17 / 255, green: 17 / 255, blue: 17 / 255)
     static let noiseOverlayOpacity = 0.075
+    static let auroraGreen = Color(red: 46 / 255, green: 217 / 255, blue: 82 / 255).opacity(0.8)
+    static let auroraTeal = Color(red: 46 / 255, green: 217 / 255, blue: 146 / 255).opacity(0.8)
+    static let auroraLime = Color(red: 119 / 255, green: 245 / 255, blue: 56 / 255)
+    static let auroraYellow = Color(red: 248 / 255, green: 255 / 255, blue: 44 / 255)
 }
 
 enum AppAnimations {
