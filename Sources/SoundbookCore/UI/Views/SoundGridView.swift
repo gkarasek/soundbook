@@ -161,14 +161,31 @@ struct SoundTileButton: View {
 
 private extension View {
     func pressToPlay(onPressBegan: @escaping () -> Void, onPressEnded: @escaping () -> Void) -> some View {
-        onLongPressGesture(minimumDuration: 0, pressing: { isPressing in
-            if isPressing {
-                onPressBegan()
-            } else {
-                onPressEnded()
-            }
-        }, perform: {})
-        .accessibilityAddTraits(.startsMediaSession)
-        .accessibilityHint(Text("Press and hold to play"))
+        modifier(PressToPlayModifier(onPressBegan: onPressBegan, onPressEnded: onPressEnded))
+    }
+}
+
+private struct PressToPlayModifier: ViewModifier {
+    let onPressBegan: () -> Void
+    let onPressEnded: () -> Void
+
+    @State private var isPressing = false
+
+    func body(content: Content) -> some View {
+        content
+            .gesture(
+                DragGesture(minimumDistance: 0)
+                    .onChanged { _ in
+                        guard !isPressing else { return }
+                        isPressing = true
+                        onPressBegan()
+                    }
+                    .onEnded { _ in
+                        isPressing = false
+                        onPressEnded()
+                    }
+            )
+            .accessibilityAddTraits(.startsMediaSession)
+            .accessibilityHint(Text("Tap to play for four seconds. Press and hold to loop."))
     }
 }
