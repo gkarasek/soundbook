@@ -20,6 +20,11 @@ struct GalleryDockView: View {
                         let isSelected = selectedLibraryID == library.id
                         let isPlaying = isSelected && isBackgroundPlaying
                         Button {
+                            if selectedLibraryID != library.id {
+                                HapticFeedback.trigger(.selection)
+                            } else {
+                                HapticFeedback.trigger(isPlaying ? .tertiary : .secondary)
+                            }
                             withAnimation(AppAnimations.dockSelection) {
                                 onSelectLibrary(library)
                             }

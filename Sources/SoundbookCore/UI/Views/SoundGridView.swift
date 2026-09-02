@@ -139,6 +139,7 @@ struct SoundTileButton: View {
         .pressToPlay(
             onPressBegan: {
                 isPressed = true
+                HapticFeedback.trigger(sound.hapticLevel)
                 onPressBegan()
             },
             onPressEnded: {
