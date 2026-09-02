@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 struct SoundGridView: View {
     let sounds: [SoundItem]
@@ -139,7 +140,9 @@ struct SoundTileButton: View {
         .pressToPlay(
             onPressBegan: {
                 isPressed = true
-                HapticFeedback.trigger(sound.hapticLevel)
+                let area = sound.gridPlacement.columnSpan * sound.gridPlacement.rowSpan
+                let style: UIImpactFeedbackGenerator.FeedbackStyle = area >= 16 ? .heavy : area >= 7 ? .medium : .light
+                UIImpactFeedbackGenerator(style: style).impactOccurred()
                 onPressBegan()
             },
             onPressEnded: {
