@@ -198,17 +198,17 @@ private struct GalleryDockPlayingAura: View {
     @State private var time: TimeInterval = 0
 
     private let tick = Timer.publish(every: 1.0 / 30.0, on: .main, in: .common).autoconnect()
-    private let blobCount = 8
-    private let borderBandWidth: CGFloat = 32
-    private let maskFeatherBlur: CGFloat = 5
-    private let auraBlur: CGFloat = 7
+    private let blobCount = 16
+    private let borderBandWidth: CGFloat = 48
+    private let maskFeatherBlur: CGFloat = 6
+    private let auraBlur: CGFloat = 12
 
     var body: some View {
         GeometryReader { geometry in
             let width = geometry.size.width
             let height = geometry.size.height
-            let radiusX = max(width * 0.5 - borderBandWidth * 0.25, 1)
-            let radiusY = max(height * 0.5 - borderBandWidth * 0.25, 1)
+            let radiusX = max(width * 0.5 - borderBandWidth * 0.2, 1)
+            let radiusY = max(height * 0.5 - borderBandWidth * 0.2, 1)
             let baseSize = min(width, height)
 
             ZStack {
@@ -218,9 +218,10 @@ private struct GalleryDockPlayingAura: View {
             .frame(width: width, height: height)
             .brightness(0.08)
             .mask(
-                Capsule()
-                    .strokeBorder(Color.white, lineWidth: borderBandWidth)
-                    .blur(radius: maskFeatherBlur)
+                GalleryDockAuraRingMask(
+                    bandWidth: borderBandWidth,
+                    innerFeather: maskFeatherBlur
+                )
             )
         }
         .compositingGroup()
@@ -264,9 +265,9 @@ private struct GalleryDockPlayingAura: View {
             + sin(time * 0.62 + phase) * 0.38
         let radialWobbleX = 1 + 0.09 * sin(time * 0.88 + phase * 1.4)
         let radialWobbleY = 1 + 0.09 * cos(time * 1.05 + phase * 1.1)
-        let breathX = 0.68 + 0.44 * sin(time * 2.15 + phase * 1.35)
-        let breathY = 0.68 + 0.44 * cos(time * 1.82 + phase * 1.6)
-        let diameter = baseSize * (0.30 + 0.10 * sin(time * 1.45 + phase * 2.2))
+        let breathX = 0.78 + 0.48 * sin(time * 2.15 + phase * 1.35)
+        let breathY = 0.78 + 0.48 * cos(time * 1.82 + phase * 1.6)
+        let diameter = baseSize * max(0.24 + 0.32 * sin(time * 1.45 + phase * 2.2), 0.08)
         let spin = time * 38 + phase * 47
         let color = GalleryDockAuraPalette.colors[index % GalleryDockAuraPalette.colors.count]
 
@@ -284,6 +285,26 @@ private struct GalleryDockPlayingAura: View {
     }
 }
 
+/// Border-band mask with a crisp outer edge and feathered inner edge only.
+private struct GalleryDockAuraRingMask: View {
+    let bandWidth: CGFloat
+    let innerFeather: CGFloat
+
+    var body: some View {
+        ZStack {
+            Capsule()
+                .fill(Color.white)
+
+            Capsule()
+                .fill(Color.white)
+                .padding(bandWidth)
+                .blur(radius: innerFeather)
+                .blendMode(.destinationOut)
+        }
+        .compositingGroup()
+    }
+}
+
 private struct OrganicAuraBlob: View {
     let color: Color
     let diameter: CGFloat
@@ -297,14 +318,14 @@ private struct OrganicAuraBlob: View {
                 RadialGradient(
                     colors: [
                         color,
-                        color.opacity(0.92),
-                        color.opacity(0.55),
-                        color.opacity(0.18),
+                        color.opacity(0.95),
+                        color.opacity(0.72),
+                        color.opacity(0.32),
                         .clear,
                     ],
                     center: .center,
                     startRadius: 0,
-                    endRadius: diameter * 0.58
+                    endRadius: diameter * 0.68
                 )
             )
             .frame(width: diameter, height: diameter)
