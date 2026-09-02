@@ -41,18 +41,22 @@ public struct AppRootView: View {
     }
 
     private func runLaunchSequence() {
+        logoReveal = 0
+        dismissProgress = 0
+        galleryReveal = 0
+
         withAnimation(AppAnimations.splashIntro) {
             logoReveal = 1
         }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.2) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.6) {
             withAnimation(AppAnimations.splashExit) {
                 dismissProgress = 1
                 galleryReveal = 1
             }
         }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3.2) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.5) {
             viewModel.beginGallerySession()
             showSplash = false
         }

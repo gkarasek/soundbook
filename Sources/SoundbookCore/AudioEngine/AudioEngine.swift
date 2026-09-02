@@ -17,6 +17,14 @@ class AudioEngine {
     private var effectFadeTimer: Timer?
     private var backgroundFadeTimer: Timer?
 
+    var isEffectPlaying: Bool {
+        effectPlayer?.isPlaying == true
+    }
+
+    var currentEffectURL: URL? {
+        effectURL
+    }
+
     init() {
         configureAudioSession()
     }
