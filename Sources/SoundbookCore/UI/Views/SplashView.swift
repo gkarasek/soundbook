@@ -8,7 +8,7 @@ struct SplashView: View {
     @State private var auroraPhase: CGFloat = 0
     @State private var breathePhase: CGFloat = 0
 
-    private let markSize: CGFloat = 120
+    private let markSize: CGFloat = 125
     private let auroraTimer = Timer.publish(every: 1.0 / 30.0, on: .main, in: .common).autoconnect()
 
     var body: some View {
@@ -146,6 +146,9 @@ struct SoundbookLogoMark: View {
     let dismissProgress: CGFloat
     let breathePhase: CGFloat
 
+    private let logoWidth: CGFloat = 54
+    private let logoHeight: CGFloat = 68.5094
+
     var body: some View {
         let entrance = eased(reveal, delay: 0.04)
         let ringEntrance = eased(reveal, delay: 0)
@@ -155,7 +158,7 @@ struct SoundbookLogoMark: View {
         let scale = (0.78 + ringEntrance * 0.22) * breathe * exitScale
 
         ZStack {
-            Circle()
+            RoundedRectangle(cornerRadius: 40, style: .continuous)
                 .fill(
                     LinearGradient(
                         colors: [
@@ -167,18 +170,19 @@ struct SoundbookLogoMark: View {
                     )
                 )
                 .overlay(
-                    Circle()
+                    RoundedRectangle(cornerRadius: 40, style: .continuous)
                         .stroke(AppColors.offWhite.opacity(0.1 * Double(ringEntrance)), lineWidth: 1)
                 )
                 .scaleEffect(0.92 + ringEntrance * 0.08)
 
             Image("Logo")
+                .renderingMode(.original)
                 .resizable()
                 .scaledToFit()
-                .padding(24)
-                .scaleEffect(0.88 + glyphEntrance * 0.12)
+                .frame(width: logoWidth, height: logoHeight)
                 .opacity(Double(glyphEntrance))
         }
+        .frame(width: 125, height: 125)
         .scaleEffect(scale)
         .opacity(Double(entrance * (1 - dismissProgress)))
     }
