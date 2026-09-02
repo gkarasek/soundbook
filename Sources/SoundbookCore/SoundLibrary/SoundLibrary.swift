@@ -43,6 +43,7 @@ struct SoundLibraryModel: Identifiable, Codable {
     let key: String
     let name: String
     let iconStyle: SoundTileVisualStyle
+    let backgroundFileName: String?
     let sounds: [SoundItem]
 }
 
@@ -81,41 +82,41 @@ class SoundLibrary {
     /// Load default sound libraries grouped by theme.
     private func loadDefaultSounds() {
         let forestSounds: [SoundItem] = [
-            item("Campfire", fileName: "forest_campfire.mp3", visualStyle: .aurora, column: 0, row: 2, columnSpan: 2, rowSpan: 2),
-            item("Wind", fileName: "forest_wind.mp3", visualStyle: .canyon, column: 5, row: 4, columnSpan: 2, rowSpan: 2),
-            item("Owl", fileName: "forest_owl.mp3", visualStyle: .leaves, column: 5, row: 6, columnSpan: 2, rowSpan: 2),
-            item("Rainfall", fileName: "forest_rainfall.mp3", visualStyle: .nightForest, column: 0, row: 4, columnSpan: 5, rowSpan: 4),
-            item("Dry Leaves", fileName: "forest_dry_leaves.mp3", visualStyle: .fog, column: 0, row: 8, columnSpan: 7, rowSpan: 2),
-            item("Creek", fileName: "forest_creek.mp3", visualStyle: .moonMist, column: 0, row: 10, columnSpan: 2, rowSpan: 2),
-            item("Woodpecker", fileName: "forest_woodpecker.mp3", visualStyle: .moonMist, column: 2, row: 10, columnSpan: 5, rowSpan: 2),
+            item("Campfire", fileName: "forest_campfire.wav", visualStyle: .aurora, column: 0, row: 2, columnSpan: 2, rowSpan: 2),
+            item("Wind", fileName: "forest_wind.wav", visualStyle: .canyon, column: 5, row: 4, columnSpan: 2, rowSpan: 2),
+            item("Owl", fileName: "forest_owl.wav", visualStyle: .leaves, column: 5, row: 6, columnSpan: 2, rowSpan: 2),
+            item("Rainfall", fileName: "forest_rainfall.wav", visualStyle: .nightForest, column: 0, row: 4, columnSpan: 5, rowSpan: 4),
+            item("Dry Leaves", fileName: "forest_dry_leaves.wav", visualStyle: .fog, column: 0, row: 8, columnSpan: 7, rowSpan: 2),
+            item("Creek", fileName: "forest_creek.wav", visualStyle: .moonMist, column: 0, row: 10, columnSpan: 2, rowSpan: 2),
+            item("Woodpecker", fileName: "forest_woodpecker.wav", visualStyle: .moonMist, column: 2, row: 10, columnSpan: 5, rowSpan: 2),
         ]
 
         let citySounds: [SoundItem] = [
-            item("Siren", fileName: "city_siren.mp3", visualStyle: .siren, column: 0, row: 2, columnSpan: 2, rowSpan: 2),
-            item("Cars", fileName: "city_cars.mp3", visualStyle: .asphalt, column: 0, row: 4, columnSpan: 5, rowSpan: 4),
-            item("Footsteps", fileName: "city_footsteps.mp3", visualStyle: .crossing, column: 5, row: 4, columnSpan: 2, rowSpan: 2),
-            item("Firetruck", fileName: "city_firetruck.mp3", visualStyle: .station, column: 5, row: 6, columnSpan: 2, rowSpan: 2),
-            item("Subway", fileName: "city_subway.mp3", visualStyle: .tunnel, column: 0, row: 8, columnSpan: 7, rowSpan: 2),
-            item("Square", fileName: "city_square.mp3", visualStyle: .plaza, column: 0, row: 10, columnSpan: 2, rowSpan: 2),
-            item("Rooftop Wind", fileName: "city_rooftop_wind.mp3", visualStyle: .rooftop, column: 2, row: 10, columnSpan: 5, rowSpan: 2),
+            item("Siren", fileName: "forest_owl.wav", visualStyle: .siren, column: 0, row: 2, columnSpan: 2, rowSpan: 2),
+            item("Cars", fileName: "forest_rainfall.wav", visualStyle: .asphalt, column: 0, row: 4, columnSpan: 5, rowSpan: 4),
+            item("Footsteps", fileName: "forest_dry_leaves.wav", visualStyle: .crossing, column: 5, row: 4, columnSpan: 2, rowSpan: 2),
+            item("Firetruck", fileName: "forest_wind.wav", visualStyle: .station, column: 5, row: 6, columnSpan: 2, rowSpan: 2),
+            item("Subway", fileName: "forest_creek.wav", visualStyle: .tunnel, column: 0, row: 8, columnSpan: 7, rowSpan: 2),
+            item("Square", fileName: "forest_campfire.wav", visualStyle: .plaza, column: 0, row: 10, columnSpan: 2, rowSpan: 2),
+            item("Rooftop Wind", fileName: "forest_wind.wav", visualStyle: .rooftop, column: 2, row: 10, columnSpan: 5, rowSpan: 2),
         ]
 
         let oceanSounds: [SoundItem] = [
-            item("Waves", fileName: "forest_creek.mp3", visualStyle: .moonMist, column: 0, row: 2, columnSpan: 3, rowSpan: 3),
-            item("Seagulls", fileName: "forest_owl.mp3", visualStyle: .aurora, column: 3, row: 2, columnSpan: 4, rowSpan: 3),
-            item("Tide Pool", fileName: "forest_rainfall.mp3", visualStyle: .fog, column: 0, row: 5, columnSpan: 7, rowSpan: 3),
-            item("Driftwood", fileName: "forest_dry_leaves.mp3", visualStyle: .canyon, column: 0, row: 8, columnSpan: 4, rowSpan: 4),
-            item("Buoy", fileName: "forest_campfire.mp3", visualStyle: .bridge, column: 4, row: 8, columnSpan: 3, rowSpan: 2),
-            item("Harbor", fileName: "forest_wind.mp3", visualStyle: .skyline, column: 4, row: 10, columnSpan: 3, rowSpan: 2),
+            item("Waves", fileName: "forest_creek.wav", visualStyle: .moonMist, column: 0, row: 2, columnSpan: 3, rowSpan: 3),
+            item("Seagulls", fileName: "forest_owl.wav", visualStyle: .aurora, column: 3, row: 2, columnSpan: 4, rowSpan: 3),
+            item("Tide Pool", fileName: "forest_rainfall.wav", visualStyle: .fog, column: 0, row: 5, columnSpan: 7, rowSpan: 3),
+            item("Driftwood", fileName: "forest_dry_leaves.wav", visualStyle: .canyon, column: 0, row: 8, columnSpan: 4, rowSpan: 4),
+            item("Buoy", fileName: "forest_campfire.wav", visualStyle: .bridge, column: 4, row: 8, columnSpan: 3, rowSpan: 2),
+            item("Harbor", fileName: "forest_wind.wav", visualStyle: .skyline, column: 4, row: 10, columnSpan: 3, rowSpan: 2),
         ]
 
         let desertSounds: [SoundItem] = [
-            item("Dunes", fileName: "forest_wind.mp3", visualStyle: .canyon, column: 0, row: 2, columnSpan: 4, rowSpan: 4),
-            item("Mirage", fileName: "forest_rainfall.mp3", visualStyle: .aurora, column: 4, row: 2, columnSpan: 3, rowSpan: 2),
-            item("Cactus", fileName: "forest_dry_leaves.mp3", visualStyle: .leaves, column: 4, row: 4, columnSpan: 3, rowSpan: 2),
-            item("Sandstorm", fileName: "forest_creek.mp3", visualStyle: .fog, column: 0, row: 6, columnSpan: 7, rowSpan: 2),
-            item("Coyote", fileName: "forest_owl.mp3", visualStyle: .alley, column: 0, row: 8, columnSpan: 2, rowSpan: 4),
-            item("Oasis", fileName: "forest_campfire.mp3", visualStyle: .moonMist, column: 2, row: 8, columnSpan: 5, rowSpan: 4),
+            item("Dunes", fileName: "forest_wind.wav", visualStyle: .canyon, column: 0, row: 2, columnSpan: 4, rowSpan: 4),
+            item("Mirage", fileName: "forest_rainfall.wav", visualStyle: .aurora, column: 4, row: 2, columnSpan: 3, rowSpan: 2),
+            item("Cactus", fileName: "forest_dry_leaves.wav", visualStyle: .leaves, column: 4, row: 4, columnSpan: 3, rowSpan: 2),
+            item("Sandstorm", fileName: "forest_creek.wav", visualStyle: .fog, column: 0, row: 6, columnSpan: 7, rowSpan: 2),
+            item("Coyote", fileName: "forest_woodpecker.wav", visualStyle: .alley, column: 0, row: 8, columnSpan: 2, rowSpan: 4),
+            item("Oasis", fileName: "forest_campfire.wav", visualStyle: .moonMist, column: 2, row: 8, columnSpan: 5, rowSpan: 4),
         ]
 
         libraries = [
@@ -124,6 +125,7 @@ class SoundLibrary {
                 key: "forest",
                 name: "Forest",
                 iconStyle: .nightForest,
+                backgroundFileName: "forest_background.wav",
                 sounds: forestSounds
             ),
             SoundLibraryModel(
@@ -131,6 +133,7 @@ class SoundLibrary {
                 key: "city",
                 name: "City",
                 iconStyle: .skyline,
+                backgroundFileName: "forest_background.wav",
                 sounds: citySounds
             ),
             SoundLibraryModel(
@@ -138,6 +141,7 @@ class SoundLibrary {
                 key: "ocean",
                 name: "Ocean",
                 iconStyle: .bridge,
+                backgroundFileName: "forest_background.wav",
                 sounds: oceanSounds
             ),
             SoundLibraryModel(
@@ -145,12 +149,9 @@ class SoundLibrary {
                 key: "desert",
                 name: "Desert",
                 iconStyle: .canyon,
+                backgroundFileName: "forest_background.wav",
                 sounds: desertSounds
             ),
         ]
-    }
-
-    func library(withID id: SoundLibraryModel.ID) -> SoundLibraryModel? {
-        libraries.first { $0.id == id }
     }
 }

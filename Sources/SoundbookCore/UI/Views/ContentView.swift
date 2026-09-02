@@ -1,9 +1,16 @@
 import SwiftUI
 
 public struct ContentView: View {
-    @StateObject private var viewModel = SoundboardViewModel()
+    @ObservedObject private var viewModel: SoundboardViewModel
+    private let entranceProgress: CGFloat
 
-    public init() {}
+    init(
+        viewModel: SoundboardViewModel,
+        entranceProgress: CGFloat = 1
+    ) {
+        self.viewModel = viewModel
+        self.entranceProgress = entranceProgress
+    }
 
     public var body: some View {
         ZStack {
@@ -29,8 +36,9 @@ public struct ContentView: View {
             Spacer(minLength: 0)
             SoundGridView(
                 sounds: viewModel.visibleSounds,
-                activeSoundID: viewModel.activeSoundID,
-                onSoundTapped: viewModel.onSoundTapped
+                entranceProgress: entranceProgress,
+                onSoundPressBegan: viewModel.onSoundPressBegan,
+                onSoundPressEnded: viewModel.onSoundPressEnded
             )
             .padding(.horizontal, 24)
             .id(viewModel.selectedLibraryID)
@@ -45,12 +53,17 @@ public struct ContentView: View {
         GalleryDockView(
             libraries: viewModel.libraries,
             selectedLibraryID: viewModel.selectedLibraryID,
+            isBackgroundPlaying: viewModel.isBackgroundPlaying,
             onSelectLibrary: viewModel.selectLibrary
         )
-        .padding(24)
+        .padding(.horizontal, 24)
+        .padding(.top, 24)
+        .padding(.bottom, 8)
+        .offset(y: (1 - entranceProgress) * 48)
+        .opacity(Double(min(1, entranceProgress * 1.35)))
     }
 }
 
 #Preview {
-    ContentView()
+    ContentView(viewModel: SoundboardViewModel())
 }

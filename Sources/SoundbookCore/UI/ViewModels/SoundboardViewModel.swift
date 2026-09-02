@@ -2,34 +2,13 @@ import Foundation
 import SwiftUI
 
 @MainActor
-final class BookSessionViewModel: ObservableObject {
-    @Published var sessions: [BookSession] = []
-
-    func createSession(title: String, bookTitle: String, audioURL: URL? = nil) {
-        let newSession = BookSession(
-            id: UUID(),
-            title: title,
-            bookTitle: bookTitle,
-            audioURL: audioURL,
-            soundMappings: [],
-            createdAt: Date(),
-            updatedAt: Date()
-        )
-        sessions.append(newSession)
-    }
-
-    func deleteSession(at offsets: IndexSet) {
-        sessions.remove(atOffsets: offsets)
-    }
-}
-
-@MainActor
 final class SoundboardViewModel: ObservableObject {
     @Published private(set) var libraries: [SoundLibraryModel]
     @Published var selectedLibraryID: SoundLibraryModel.ID?
-    @Published var activeSoundID: SoundItem.ID?
+    @Published private(set) var isBackgroundPlaying = false
 
     private let audioEngine: AudioEngine
+    private var gallerySessionStarted = false
 
     init(
         soundLibrary: SoundLibrary = .shared,
@@ -38,6 +17,11 @@ final class SoundboardViewModel: ObservableObject {
         self.libraries = soundLibrary.libraries
         self.selectedLibraryID = soundLibrary.libraries.first?.id
         self.audioEngine = audioEngine
+    }
+
+    func beginGallerySession() {
+        guard !gallerySessionStarted else { return }
+        gallerySessionStarted = true
     }
 
     var selectedLibrary: SoundLibraryModel? {
@@ -55,29 +39,55 @@ final class SoundboardViewModel: ObservableObject {
     }
 
     func selectLibrary(_ library: SoundLibraryModel) {
+        if selectedLibraryID == library.id {
+            toggleBackgroundAudio()
+            return
+        }
+
         selectedLibraryID = library.id
         stopActiveSound()
+        isBackgroundPlaying = true
+        startBackground(for: library)
     }
 
-    func onSoundTapped(_ sound: SoundItem) {
-        if activeSoundID == sound.id {
-            stopActiveSound()
-            return
-        }
-
+    func onSoundPressBegan(_ sound: SoundItem) {
         guard let soundURL = resolveAudioURL(for: sound.fileName) else {
-            audioEngine.stopCurrent()
-            activeSoundID = nil
+            audioEngine.stopCurrentImmediately()
             return
         }
 
-        let didStart = audioEngine.playExclusive(from: soundURL)
-        activeSoundID = didStart ? sound.id : nil
+        _ = audioEngine.playExclusive(from: soundURL)
+    }
+
+    func onSoundPressEnded() {
+        audioEngine.fadeOutAndStopCurrent()
     }
 
     func stopActiveSound() {
-        audioEngine.stopCurrent()
-        activeSoundID = nil
+        audioEngine.fadeOutAndStopCurrent()
+    }
+
+    private func toggleBackgroundAudio() {
+        if isBackgroundPlaying {
+            isBackgroundPlaying = false
+            audioEngine.fadeOutAndStopBackground()
+            return
+        }
+
+        guard let library = selectedLibrary else { return }
+        isBackgroundPlaying = true
+        startBackground(for: library)
+    }
+
+    private func startBackground(for library: SoundLibraryModel) {
+        guard let fileName = library.backgroundFileName,
+              let soundURL = resolveAudioURL(for: fileName) else {
+            isBackgroundPlaying = false
+            audioEngine.fadeOutAndStopBackground()
+            return
+        }
+
+        _ = audioEngine.playBackground(from: soundURL)
     }
 
     private func resolveAudioURL(for fileName: String) -> URL? {

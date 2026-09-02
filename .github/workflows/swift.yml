@@ -1,0 +1,18 @@
+# Build and test the iOS app (SoundbookCore is iOS-only; do not use `swift build` on macOS).
+
+name: Swift
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build SoundbookApp for iOS Simulator
+      run: xcodebuild -scheme SoundbookApp -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO -quiet build
