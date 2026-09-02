@@ -1,5 +1,6 @@
 import Combine
 import SwiftUI
+import UIKit
 
 struct GalleryDockView: View {
     let libraries: [SoundLibraryModel]
@@ -21,9 +22,9 @@ struct GalleryDockView: View {
                         let isPlaying = isSelected && isBackgroundPlaying
                         Button {
                             if selectedLibraryID != library.id {
-                                HapticFeedback.trigger(.selection)
+                                UISelectionFeedbackGenerator().selectionChanged()
                             } else {
-                                HapticFeedback.trigger(isPlaying ? .tertiary : .secondary)
+                                UIImpactFeedbackGenerator(style: isPlaying ? .light : .medium).impactOccurred()
                             }
                             withAnimation(AppAnimations.dockSelection) {
                                 onSelectLibrary(library)
