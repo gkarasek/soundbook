@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "city-rooftop-wind.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

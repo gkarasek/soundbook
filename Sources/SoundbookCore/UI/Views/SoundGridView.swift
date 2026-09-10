@@ -121,18 +121,19 @@ struct SoundTileButton: View {
             shape
                 .fill(SoundTileGradients.gradient(for: sound.visualStyle))
 
+            if let illustration = UIImage(named: sound.illustrationName) {
+                Image(uiImage: illustration)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+                    .clipShape(shape)
+            }
+
             shape
-                .fill(pressGradient)
-                .blendMode(.overlay)
+                .fill(Color.black.opacity(isPressed ? 0.22 : 0))
 
             shape
                 .stroke(AppColors.offWhite.opacity(0.2), lineWidth: 1)
-
-            Text(sound.name)
-                .font(.caption.weight(.semibold))
-                .foregroundColor(Color.white.opacity(0.85))
-                .multilineTextAlignment(.center)
-                .padding(12)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .contentShape(shape)
@@ -149,16 +150,6 @@ struct SoundTileButton: View {
                 isPressed = false
                 onPressEnded()
             }
-        )
-    }
-
-    private var pressGradient: LinearGradient {
-        LinearGradient(
-            colors: isPressed
-                ? [AppColors.holdOverlayTop.opacity(0.3), AppColors.offWhite.opacity(0)]
-                : [AppColors.offWhite.opacity(0), AppColors.holdOverlayTop.opacity(0.6)],
-            startPoint: .top,
-            endPoint: .bottom
         )
     }
 }

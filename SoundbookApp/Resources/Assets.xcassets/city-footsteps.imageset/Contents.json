@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "city-footsteps.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
