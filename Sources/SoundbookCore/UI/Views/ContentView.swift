@@ -3,6 +3,7 @@ import SwiftUI
 public struct ContentView: View {
     @ObservedObject private var viewModel: SoundboardViewModel
     private let entranceProgress: CGFloat
+    @State private var showInterestSheet = false
 
     init(
         viewModel: SoundboardViewModel,
@@ -29,6 +30,9 @@ public struct ContentView: View {
                 navigationArea
             }
         }
+        .sheet(isPresented: $showInterestSheet) {
+            CategoryInterestSheet()
+        }
     }
 
     private var contentArea: some View {
@@ -54,7 +58,8 @@ public struct ContentView: View {
             libraries: viewModel.libraries,
             selectedLibraryID: viewModel.selectedLibraryID,
             isBackgroundPlaying: viewModel.isBackgroundPlaying,
-            onSelectLibrary: viewModel.selectLibrary
+            onSelectLibrary: viewModel.selectLibrary,
+            onSelectLocked: { showInterestSheet = true }
         )
         .padding(.horizontal, 24)
         .padding(.top, 24)

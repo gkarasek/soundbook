@@ -47,6 +47,8 @@ final class SoundboardViewModel: ObservableObject {
     }
 
     func selectLibrary(_ library: SoundLibraryModel) {
+        guard !library.isLocked else { return }
+
         if selectedLibraryID == library.id {
             toggleBackgroundAudio()
             return
