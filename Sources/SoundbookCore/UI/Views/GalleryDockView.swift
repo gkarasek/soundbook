@@ -1,4 +1,3 @@
-import Combine
 import SwiftUI
 import UIKit
 
@@ -117,18 +116,6 @@ private struct GalleryDockPill: View {
     private let selectedWidth: CGFloat = 240
     private let idleWidth: CGFloat = 160
 
-    private var idleColor: Color { Color(red: 189 / 255, green: 115 / 255, blue: 61 / 255) }
-    private var selectedGradient: LinearGradient {
-        LinearGradient(
-            colors: [
-                Color(red: 46 / 255, green: 128 / 255, blue: 122 / 255),
-                Color(red: 15 / 255, green: 51 / 255, blue: 66 / 255),
-            ],
-            startPoint: .top,
-            endPoint: .bottom
-        )
-    }
-
     private var borderColor: Color {
         isSelected
             ? Color(red: 46 / 255, green: 217 / 255, blue: 82 / 255).opacity(0.8)
@@ -137,17 +124,13 @@ private struct GalleryDockPill: View {
 
     var body: some View {
         ZStack {
-            Capsule()
-                .fill(idleColor)
-
-            Capsule()
-                .fill(selectedGradient)
-                .opacity(isSelected ? 1 : 0)
-
-            Capsule()
-                .fill(SoundTileGradients.dockGradient(for: library.iconStyle))
-                .padding(10)
-                .opacity(isSelected ? 0.35 : 0)
+            if let artwork = UIImage(named: library.artworkName) {
+                Image(uiImage: artwork)
+                    .resizable()
+                    .scaledToFill()
+                    .opacity(isSelected ? 1 : 0.55)
+                    .saturation(isSelected ? 1 : 0.4)
+            }
 
             if showAura {
                 GalleryDockPlayingAura()

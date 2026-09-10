@@ -3,7 +3,6 @@ import SwiftUI
 enum AppColors {
     static let offWhite = Color(red: 241 / 255, green: 241 / 255, blue: 241 / 255)
     static let splashTop = Color(red: 30 / 255, green: 30 / 255, blue: 30 / 255)
-    static let holdOverlayTop = Color(red: 17 / 255, green: 17 / 255, blue: 17 / 255)
     static let noiseOverlayOpacity = 0.075
     static let auroraGreen = Color(red: 46 / 255, green: 217 / 255, blue: 82 / 255).opacity(0.8)
     static let auroraTeal = Color(red: 46 / 255, green: 217 / 255, blue: 146 / 255).opacity(0.8)
@@ -56,21 +55,6 @@ enum SoundTileGradients {
             return LinearGradient(colors: [Color(red: 0.30, green: 0.22, blue: 0.20), Color(red: 0.11, green: 0.08, blue: 0.08)], startPoint: .topLeading, endPoint: .bottomTrailing)
         case .tunnel:
             return LinearGradient(colors: [Color(red: 0.16, green: 0.16, blue: 0.18), Color(red: 0.06, green: 0.07, blue: 0.09)], startPoint: .topLeading, endPoint: .bottomTrailing)
-        }
-    }
-
-    static func dockGradient(for style: SoundTileVisualStyle) -> LinearGradient {
-        switch style {
-        case .nightForest:
-            return LinearGradient(colors: [Color(red: 0.18, green: 0.50, blue: 0.48), Color(red: 0.06, green: 0.20, blue: 0.26)], startPoint: .top, endPoint: .bottom)
-        case .skyline:
-            return LinearGradient(colors: [Color(red: 0.36, green: 0.25, blue: 0.45), Color(red: 0.17, green: 0.13, blue: 0.25)], startPoint: .topLeading, endPoint: .bottomTrailing)
-        case .bridge:
-            return LinearGradient(colors: [Color(red: 0.20, green: 0.45, blue: 0.52), Color(red: 0.08, green: 0.18, blue: 0.28)], startPoint: .top, endPoint: .bottom)
-        case .canyon:
-            return LinearGradient(colors: [Color(red: 0.74, green: 0.45, blue: 0.24), Color(red: 0.45, green: 0.28, blue: 0.14)], startPoint: .topLeading, endPoint: .bottomTrailing)
-        default:
-            return gradient(for: style)
         }
     }
 }
