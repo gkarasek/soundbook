@@ -45,8 +45,25 @@ struct SoundLibraryModel: Identifiable, Codable {
     let name: String
     let backgroundFileName: String?
     let sounds: [SoundItem]
+    let isLocked: Bool
 
     var artworkName: String { "library-\(key)" }
+
+    init(
+        id: UUID,
+        key: String,
+        name: String,
+        backgroundFileName: String?,
+        sounds: [SoundItem],
+        isLocked: Bool = false
+    ) {
+        self.id = id
+        self.key = key
+        self.name = name
+        self.backgroundFileName = backgroundFileName
+        self.sounds = sounds
+        self.isLocked = isLocked
+    }
 }
 
 class SoundLibrary {
@@ -151,6 +168,14 @@ class SoundLibrary {
                 name: "Desert",
                 backgroundFileName: "forest_background.wav",
                 sounds: desertSounds
+            ),
+            SoundLibraryModel(
+                id: UUID(),
+                key: "more",
+                name: "More",
+                backgroundFileName: nil,
+                sounds: [],
+                isLocked: true
             ),
         ]
     }

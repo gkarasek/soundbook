@@ -6,6 +6,7 @@ struct GalleryDockView: View {
     let selectedLibraryID: SoundLibraryModel.ID?
     let isBackgroundPlaying: Bool
     let onSelectLibrary: (SoundLibraryModel) -> Void
+    let onSelectLocked: () -> Void
 
     private let pillHeight: CGFloat = 80
     private let dockCornerRadius: CGFloat = 96
@@ -20,6 +21,11 @@ struct GalleryDockView: View {
                         let isSelected = selectedLibraryID == library.id
                         let isPlaying = isSelected && isBackgroundPlaying
                         Button {
+                            if library.isLocked {
+                                UISelectionFeedbackGenerator().selectionChanged()
+                                onSelectLocked()
+                                return
+                            }
                             if selectedLibraryID != library.id {
                                 UISelectionFeedbackGenerator().selectionChanged()
                             } else {
@@ -41,11 +47,13 @@ struct GalleryDockView: View {
                         .accessibilityLabel(Text(library.name))
                         .accessibilityHint(
                             Text(
-                                isSelected
-                                    ? (isPlaying
-                                        ? "Double tap to turn off background ambience"
-                                        : "Double tap to turn on background ambience")
-                                    : ""
+                                library.isLocked
+                                    ? "Double tap to get updates"
+                                    : (isSelected
+                                        ? (isPlaying
+                                            ? "Double tap to turn off background ambience"
+                                            : "Double tap to turn on background ambience")
+                                        : "")
                             )
                         )
                         .accessibilityAddTraits(isSelected ? .isSelected : [])
@@ -124,7 +132,13 @@ private struct GalleryDockPill: View {
 
     var body: some View {
         ZStack {
-            if let artwork = UIImage(named: library.artworkName) {
+            if library.isLocked {
+                Capsule()
+                    .fill(Color(red: 0.14, green: 0.14, blue: 0.14))
+                Image(systemName: "lock.fill")
+                    .font(.system(size: 22, weight: .semibold))
+                    .foregroundColor(AppColors.offWhite.opacity(0.7))
+            } else if let artwork = UIImage(named: library.artworkName) {
                 Image(uiImage: artwork)
                     .resizable()
                     .scaledToFill()
@@ -341,7 +355,8 @@ private enum GalleryDockAuraPalette {
         libraries: SoundLibrary.shared.libraries,
         selectedLibraryID: SoundLibrary.shared.libraries.first?.id,
         isBackgroundPlaying: true,
-        onSelectLibrary: { _ in }
+        onSelectLibrary: { _ in },
+        onSelectLocked: {}
     )
     .padding()
     .background(Color.black)
